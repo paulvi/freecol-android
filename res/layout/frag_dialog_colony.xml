@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="500dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/menu_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="50dp" >
+
+    <TextView
+        android:id="@+id/title"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="left" />
+
+    <org.freecolandroid.ui.ColonyMapCanvas
+        android:id="@+id/colony_canvas"
+        android:layout_width="380dp"
+        android:layout_height="200dp" />
+
+</LinearLayout>

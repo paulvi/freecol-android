@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="600dp"
+    android:layout_height="wrap_content"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="30dp"
+    android:paddingBottom="20dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/menu_bg" >
+
+	 <TextView
+	     android:id="@+id/title"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_marginBottom="20dp"
+	     style="@android:style/TextAppearance.DeviceDefault.Large" />
+	 
+	 <TextView
+	     android:id="@+id/message"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_marginBottom="20dp"
+	     style="@android:style/TextAppearance.DeviceDefault.Medium" />
+	   
+	<ListView
+	    android:id="@+id/unit_list"
+	    android:layout_width="match_parent"
+	    android:layout_height="350dp"
+	    android:listSelector="@drawable/menu_bg"
+	    android:background="@drawable/menu_bg" />
+	
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="20dp"
+	    android:orientation="horizontal" >
+
+	    <Button
+		    android:id="@+id/cancel"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" />
+	    
+		<Button
+		    android:id="@+id/ok"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" />
+	</LinearLayout>
+  
+  </LinearLayout>

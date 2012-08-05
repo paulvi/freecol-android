@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <org.freecolandroid.ui.GameCanvas
+        android:id="@+id/canvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
+    <RelativeLayout
+        android:id="@+id/info_panel"
+        android:layout_width="260dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/menu_bg" >
+        
+        <ImageView
+            android:id="@+id/prev_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:padding="6dp"
+            android:clickable="true"
+            android:src="@drawable/arrow_left" />
+        
+        <ImageView
+            android:id="@+id/next_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:padding="6dp"
+            android:clickable="true"
+            android:src="@drawable/arrow_right" />
+        
+        <ImageView
+            android:id="@+id/unit_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:scaleType="center" />
+        
+        <TextView
+            android:id="@+id/unit_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_toRightOf="@id/unit_image" />
+        
+        <TextView
+            android:id="@+id/unit_moves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/unit_image"
+            android:layout_below="@id/unit_name" />
+        
+    </RelativeLayout>
+    
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="FreeColTheme" parent="@android:style/Theme.DeviceDefault"></style>
+
+    <style name="GameMenu" parent="@android:style/Theme.DeviceDefault.Panel">
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="MessageDialog" parent="@android:style/Theme.DeviceDefault.Panel">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+</resources>
