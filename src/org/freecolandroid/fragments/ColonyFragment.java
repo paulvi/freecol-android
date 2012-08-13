@@ -17,40 +17,45 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments.dialogs;
+package org.freecolandroid.fragments;
 
 import net.sf.freecol.common.model.Colony;
 
 import org.freecolandroid.R;
 import org.freecolandroid.ui.ColonyMapCanvas;
 
-import android.app.Dialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ColonyDialogFragment extends FreeColDialogFragment {
+public class ColonyFragment extends FreeColFragment {
 
 	private Colony mColony;
 
-	public static ColonyDialogFragment newInstance(Colony colony) {
-		ColonyDialogFragment d = new ColonyDialogFragment();
+	public static ColonyFragment newInstance(Colony colony) {
+		ColonyFragment d = new ColonyFragment();
 		d.mColony = colony;
 		return d;
 	}
 
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Dialog d = new Dialog(getActivity(), R.style.MessageDialog);
-		d.setContentView(R.layout.frag_dialog_colony);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.frag_colony, container, false);
+	}
 
-		TextView title = (TextView) d.findViewById(R.id.title);
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		TextView title = (TextView) getView().findViewById(R.id.title);
 		title.setText(mColony.getName());
 
-		ColonyMapCanvas canvas = (ColonyMapCanvas) d
-				.findViewById(R.id.colony_canvas);
+		ColonyMapCanvas canvas = (ColonyMapCanvas) getView().findViewById(
+				R.id.colony_canvas);
 		canvas.init(mClient, mColony);
-
-		return d;
 	}
 
 }

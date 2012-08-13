@@ -8,7 +8,7 @@
     </style>
 
     <style name="MessageDialog" parent="@android:style/Theme.DeviceDefault.Panel">
-        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 
 </resources>

@@ -84,12 +84,12 @@ import net.sf.freecol.common.option.PercentageOption;
 import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
+import org.freecolandroid.fragments.ColonyFragment;
 import org.freecolandroid.fragments.GameFragment;
 import org.freecolandroid.fragments.MainMenuFragment;
 import org.freecolandroid.fragments.NewGameFragment;
 import org.freecolandroid.fragments.SplashScreenFragment;
 import org.freecolandroid.fragments.StartGameFragment;
-import org.freecolandroid.fragments.dialogs.ColonyDialogFragment;
 import org.freecolandroid.fragments.dialogs.ConfirmDialogFragment;
 import org.freecolandroid.fragments.dialogs.EndTurnDialogFragment;
 import org.freecolandroid.fragments.dialogs.FreeColDialogFragment.DialogListener;
@@ -569,11 +569,15 @@ public class GUI {
      *
      * @param colony The colony whose panel needs to be displayed.
      */
-    public void showColonyPanel(Colony colony) {
-    	ColonyDialogFragment f = ColonyDialogFragment.newInstance(colony);
-    	f.setClient(freeColClient);
-    	f.show(freeColClient.getActivity().getFragmentManager(), "");
-    }
+	public void showColonyPanel(Colony colony) {
+		ColonyFragment f = ColonyFragment.newInstance(colony);
+		f.setClient(freeColClient);
+		FragmentTransaction ft = freeColClient.getActivity()
+				.getFragmentManager().beginTransaction();
+		ft.replace(R.id.content, f);
+		ft.addToBackStack("");
+		ft.commit();
+	}
 
     public void showColonyPanel(Colony colony, Runnable callback) {
         canvas.showColonyPanel(colony, callback);

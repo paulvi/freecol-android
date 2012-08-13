@@ -21,11 +21,14 @@ package org.freecolandroid.ui;
 
 import static org.freecolandroid.Constants.LOG_TAG;
 
+import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.java.awt.Graphics2D;
 
 import net.sf.freecol.client.FreeColClient;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -60,6 +63,16 @@ public class GameCanvas extends SurfaceView implements Callback {
 	}
 	
 	@Override
+	public void onWindowFocusChanged(boolean hasWindowFocus) {
+		super.onWindowFocusChanged(hasWindowFocus);
+		if (hasWindowFocus) {
+			mPaintThread.setPaused(false);
+		} else {
+			mPaintThread.setPaused(true);
+		}
+	}
+	
+	@Override
 	protected void onDraw(Canvas canvas) {
 		if (mClient != null && canvas != null) {
 			Graphics2D g2d = new Graphics2D(canvas);
@@ -74,14 +87,13 @@ public class GameCanvas extends SurfaceView implements Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		mPaintThread.setRunning(true);
 		mPaintThread.start();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
-		mPaintThread.setRunning(false);
+		mPaintThread.stopPainting();
 		while (retry) {
 			try {
 				mPaintThread.join();
@@ -92,10 +104,16 @@ public class GameCanvas extends SurfaceView implements Callback {
 
 	private class PaintThread extends Thread {
 		
-		private boolean mRunning;
+		private boolean mRunning = true;
 		
-		public void setRunning(boolean running) {
-			mRunning = running;
+		private boolean mPaused = false;
+		
+		public void stopPainting() {
+			mRunning = false;
+		}
+		
+		public void setPaused(boolean paused) {
+			mPaused = paused;
 		}
 		
 		@Override
@@ -104,18 +122,21 @@ public class GameCanvas extends SurfaceView implements Callback {
 			System.out.println();
 			Canvas canvas = null;
 			while (mRunning) {
-				try {
-					canvas = mHolder.lockCanvas();
-					onDraw(canvas);
-				} catch (Exception e) {
-//					mRunning = false;
-					Log.w(LOG_TAG, "Exception while drawing", e);
-				} finally {
-					if (canvas != null) {
-						mHolder.unlockCanvasAndPost(canvas);
+				if (!mPaused) {
+					try {
+						canvas = mHolder.lockCanvas();
+						onDraw(canvas);
+					} catch (Exception e) {
+	//					mRunning = false;
+						Log.w(LOG_TAG, "Exception while drawing", e);
+					} finally {
+						if (canvas != null) {
+							mHolder.unlockCanvasAndPost(canvas);
+						}
 					}
 				}
 			}
+			SystemClock.sleep(50);
 			Log.d(LOG_TAG, "GameCanvas.PaintThread.run() - stop");
 		}
 		
