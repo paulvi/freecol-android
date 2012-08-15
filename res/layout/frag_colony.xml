@@ -1,23 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/menu_bg"
-    android:gravity="center"
-    android:orientation="vertical"
+    android:background="@drawable/bg_paper"
     android:padding="50dp" >
 
     <TextView
         android:id="@+id/title"
-        style="@android:style/TextAppearance.DeviceDefault.Large"
-        android:layout_width="match_parent"
+        style="@style/ColonyDetailsTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="20dp"
         android:gravity="left" />
 
     <org.freecolandroid.ui.ColonyMapCanvas
         android:id="@+id/colony_canvas"
-        android:layout_width="380dp"
-        android:layout_height="200dp" />
+        android:layout_width="460dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/title"
+        android:layout_marginBottom="10dp" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/rebel_shield"
+        android:layout_width="60dp"
+        android:layout_height="64dp"
+        android:layout_alignLeft="@id/colony_canvas"
+        android:layout_below="@id/colony_canvas"
+        android:layout_marginTop="6dp" />
+
+    <TextView
+        android:id="@+id/rebel_count"
+        style="@style/ColonyDetailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/colony_canvas"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/rebel_shield" />
+
+    <TextView
+        android:id="@+id/rebel_percentage"
+        style="@style/ColonyDetailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rebel_count"
+        android:layout_toRightOf="@id/rebel_shield" />
+
+    <ImageView
+        android:id="@+id/royal_shield"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
+        android:layout_alignRight="@id/colony_canvas"
+        android:layout_below="@id/colony_canvas" />
+
+    <TextView
+        android:id="@+id/royal_count"
+        style="@style/ColonyDetailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/colony_canvas"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@id/royal_shield" />
+
+    <TextView
+        android:id="@+id/royal_percentage"
+        style="@style/ColonyDetailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/royal_count"
+        android:layout_toLeftOf="@id/royal_shield" />
+
+    <TextView
+        android:id="@+id/population_count"
+        style="@style/ColonyDetailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/colony_canvas"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@id/royal_shield"
+        android:layout_toRightOf="@id/rebel_shield"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/bonus"
+        style="@style/ColonyDetailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/population_count"
+        android:layout_toLeftOf="@id/royal_shield"
+        android:layout_toRightOf="@id/rebel_shield"
+        android:gravity="center_horizontal" />
+
+</RelativeLayout>

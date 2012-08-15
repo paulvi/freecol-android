@@ -20,6 +20,7 @@
 package org.freecolandroid.fragments;
 
 import net.sf.freecol.client.FreeColClient;
+import net.sf.freecol.client.gui.ImageLibrary;
 import android.app.Fragment;
 
 public abstract class FreeColFragment extends Fragment {
@@ -30,4 +31,7 @@ public abstract class FreeColFragment extends Fragment {
 		this.mClient = client;
 	}
 
+	protected ImageLibrary getImageLibrary() {
+		return mClient.getGUI().getImageLibrary();
+	}
 }

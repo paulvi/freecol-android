@@ -11,4 +11,8 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="ColonyDetailsTitle" parent="@android:style/TextAppearance.DeviceDefault.Large.Inverse"></style>
+
+    <style name="ColonyDetailsText" parent="@android:style/TextAppearance.DeviceDefault.Medium.Inverse"></style>
+
 </resources>
