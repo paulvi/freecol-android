@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_paper"
-    android:padding="50dp" >
+    android:paddingLeft="50dp"
+    android:paddingTop="20dp" >
 
     <TextView
         android:id="@+id/title"
@@ -91,5 +92,49 @@
         android:layout_toLeftOf="@id/royal_shield"
         android:layout_toRightOf="@id/rebel_shield"
         android:gravity="center_horizontal" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/colony_canvas"
+        android:layout_alignRight="@id/colony_canvas"
+        android:layout_below="@id/rebel_shield" >
+
+        <ImageView
+            android:id="@+id/current_production_image"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/current_production_title"
+            style="@style/ColonyDetailsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/current_production_image"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/current_production_turns"
+            style="@style/ColonyDetailsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/current_production_title"
+            android:layout_toRightOf="@id/current_production_image"
+            android:gravity="center" />
+
+        <ListView
+            android:id="@+id/current_production_progress_list"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/current_production_turns"
+            android:layout_toRightOf="@id/current_production_image" />
+    </RelativeLayout>
 
 </RelativeLayout>
