@@ -23,6 +23,17 @@
         android:layout_below="@id/title"
         android:layout_marginBottom="10dp" />
 
+    <GridView
+        android:id="@+id/buildig_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:numColumns="auto_fit"
+        android:columnWidth="180dp"
+        android:layout_alignBottom="@+id/production_info"
+        android:layout_alignTop="@id/colony_canvas"
+        android:layout_toRightOf="@id/colony_canvas" />
+
     <ImageView
         android:id="@+id/rebel_shield"
         android:layout_width="60dp"
@@ -94,6 +105,7 @@
         android:gravity="center_horizontal" />
 
     <RelativeLayout
+        android:id="@+id/production_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/colony_canvas"
@@ -130,10 +142,10 @@
         <ListView
             android:id="@+id/current_production_progress_list"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/current_production_turns"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/current_production_image" />
     </RelativeLayout>
 

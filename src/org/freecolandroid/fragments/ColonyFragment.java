@@ -32,6 +32,7 @@ import net.sf.freecol.common.resources.ResourceManager;
 import org.freecolandroid.R;
 import org.freecolandroid.repackaged.java.awt.Image;
 import org.freecolandroid.ui.ColonyMapCanvas;
+import org.freecolandroid.ui.adapters.BuildingsListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.ConstructionProgress;
 
@@ -40,6 +41,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -70,6 +72,21 @@ public class ColonyFragment extends FreeColFragment {
         canvas.init(mClient, mColony);
 
         // Update the population info views
+        updatePopulationInfo();
+
+        // Update current production info
+        updateProductionInfo();
+        
+        // Update the building grid
+        updateBuildingInfo();
+    }
+
+    private void updateBuildingInfo() {
+        GridView buildingGrid = (GridView) getView().findViewById(R.id.buildig_grid);
+        buildingGrid.setAdapter(new BuildingsListAdapter(getActivity(), mClient, mColony));
+    }
+
+    private void updatePopulationInfo() {
         int population = mColony.getUnitCount();
         int members = mColony.getMembers();
         int rebels = mColony.getSoL();
@@ -107,8 +124,9 @@ public class ColonyFragment extends FreeColFragment {
         TextView bonusCount = (TextView) getView().findViewById(R.id.bonus);
         bonusCount.setText(Messages.message(StringTemplate.template("colonyPanel.bonusLabel")
                 .addAmount("%number%", mColony.getProductionBonus())));
+    }
 
-        // Update current production info
+    private void updateProductionInfo() {
         BuildableType buildable = mColony.getCurrentlyBuilding();
         ImageView currentProductionImage = (ImageView) getView().findViewById(
                 R.id.current_production_image);
@@ -138,6 +156,5 @@ public class ColonyFragment extends FreeColFragment {
                     amountProduced));
         }
         currentProductionProgress.setAdapter(new ConstructionProgressListAdapter(list));
-
     }
 }
