@@ -32,6 +32,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import net.sf.freecol.client.ClientOptions;
+import net.sf.freecol.client.FreeColClient;
+import net.sf.freecol.client.control.InGameController;
+import net.sf.freecol.client.gui.Canvas;
+import net.sf.freecol.client.gui.GUI;
+import net.sf.freecol.client.gui.ImageLibrary;
+import net.sf.freecol.client.gui.i18n.Messages;
+import net.sf.freecol.common.model.Colony;
+import net.sf.freecol.common.model.Game;
+import net.sf.freecol.common.model.HistoryEvent;
+import net.sf.freecol.common.model.Modifier;
+import net.sf.freecol.common.model.Player;
+import net.sf.freecol.common.model.Specification;
+import net.sf.freecol.common.model.StringTemplate;
+import net.sf.freecol.common.model.Turn;
+import net.sf.freecol.common.option.IntegerOption;
+import net.sf.freecol.common.option.Option;
+import net.sf.freecol.common.resources.ResourceManager;
+
 import org.freecolandroid.repackaged.java.awt.Color;
 import org.freecolandroid.repackaged.java.awt.Component;
 import org.freecolandroid.repackaged.java.awt.Cursor;
@@ -52,39 +71,17 @@ import org.freecolandroid.repackaged.javax.swing.Icon;
 import org.freecolandroid.repackaged.javax.swing.InputMap;
 import org.freecolandroid.repackaged.javax.swing.JButton;
 import org.freecolandroid.repackaged.javax.swing.JComponent;
-import org.freecolandroid.repackaged.javax.swing.JInternalFrame;
 import org.freecolandroid.repackaged.javax.swing.JLabel;
 import org.freecolandroid.repackaged.javax.swing.JPanel;
 import org.freecolandroid.repackaged.javax.swing.JTextArea;
 import org.freecolandroid.repackaged.javax.swing.JTextPane;
 import org.freecolandroid.repackaged.javax.swing.KeyStroke;
-import org.freecolandroid.repackaged.javax.swing.SwingUtilities;
 import org.freecolandroid.repackaged.javax.swing.border.Border;
 import org.freecolandroid.repackaged.javax.swing.text.AttributeSet;
 import org.freecolandroid.repackaged.javax.swing.text.DefaultStyledDocument;
 import org.freecolandroid.repackaged.javax.swing.text.Style;
 import org.freecolandroid.repackaged.javax.swing.text.StyleConstants;
 import org.freecolandroid.repackaged.javax.swing.text.StyleContext;
-
-
-import net.sf.freecol.client.ClientOptions;
-import net.sf.freecol.client.FreeColClient;
-import net.sf.freecol.client.control.InGameController;
-import net.sf.freecol.client.gui.Canvas;
-import net.sf.freecol.client.gui.GUI;
-import net.sf.freecol.client.gui.ImageLibrary;
-import net.sf.freecol.client.gui.i18n.Messages;
-import net.sf.freecol.common.model.Colony;
-import net.sf.freecol.common.model.Game;
-import net.sf.freecol.common.model.HistoryEvent;
-import net.sf.freecol.common.model.Modifier;
-import net.sf.freecol.common.model.Player;
-import net.sf.freecol.common.model.Specification;
-import net.sf.freecol.common.model.StringTemplate;
-import net.sf.freecol.common.model.Turn;
-import net.sf.freecol.common.option.IntegerOption;
-import net.sf.freecol.common.option.Option;
-import net.sf.freecol.common.resources.ResourceManager;
 
 /**
  * Superclass for all panels in FreeCol.

@@ -28,6 +28,36 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import net.miginfocom.swing.MigLayout;
+import net.sf.freecol.FreeCol;
+import net.sf.freecol.client.ClientOptions;
+import net.sf.freecol.client.FreeColClient;
+import net.sf.freecol.client.gui.GUI;
+import net.sf.freecol.client.gui.i18n.Messages;
+import net.sf.freecol.common.model.AbstractGoods;
+import net.sf.freecol.common.model.BuildableType;
+import net.sf.freecol.common.model.Building;
+import net.sf.freecol.common.model.Colony;
+import net.sf.freecol.common.model.Colony.ColonyChangeEvent;
+import net.sf.freecol.common.model.ColonyTile;
+import net.sf.freecol.common.model.FreeColGameObject;
+import net.sf.freecol.common.model.Goods;
+import net.sf.freecol.common.model.GoodsContainer;
+import net.sf.freecol.common.model.GoodsType;
+import net.sf.freecol.common.model.Map.Direction;
+import net.sf.freecol.common.model.ModelMessage;
+import net.sf.freecol.common.model.Player;
+import net.sf.freecol.common.model.Player.NoClaimReason;
+import net.sf.freecol.common.model.ProductionInfo;
+import net.sf.freecol.common.model.Specification;
+import net.sf.freecol.common.model.StringTemplate;
+import net.sf.freecol.common.model.Tile;
+import net.sf.freecol.common.model.TileType;
+import net.sf.freecol.common.model.TradeRoute;
+import net.sf.freecol.common.model.Unit;
+import net.sf.freecol.common.model.UnitLocation.NoAddReason;
+import net.sf.freecol.common.model.UnitType;
+
 import org.freecolandroid.repackaged.java.awt.Color;
 import org.freecolandroid.repackaged.java.awt.Component;
 import org.freecolandroid.repackaged.java.awt.Container;
@@ -61,37 +91,6 @@ import org.freecolandroid.repackaged.javax.swing.KeyStroke;
 import org.freecolandroid.repackaged.javax.swing.ScrollPaneConstants;
 import org.freecolandroid.repackaged.javax.swing.SwingUtilities;
 import org.freecolandroid.repackaged.javax.swing.border.BevelBorder;
-
-
-import net.miginfocom.swing.MigLayout;
-import net.sf.freecol.FreeCol;
-import net.sf.freecol.client.ClientOptions;
-import net.sf.freecol.client.FreeColClient;
-import net.sf.freecol.client.gui.GUI;
-import net.sf.freecol.client.gui.i18n.Messages;
-import net.sf.freecol.common.model.AbstractGoods;
-import net.sf.freecol.common.model.BuildableType;
-import net.sf.freecol.common.model.Building;
-import net.sf.freecol.common.model.Colony;
-import net.sf.freecol.common.model.Colony.ColonyChangeEvent;
-import net.sf.freecol.common.model.ColonyTile;
-import net.sf.freecol.common.model.FreeColGameObject;
-import net.sf.freecol.common.model.Goods;
-import net.sf.freecol.common.model.GoodsContainer;
-import net.sf.freecol.common.model.GoodsType;
-import net.sf.freecol.common.model.Map.Direction;
-import net.sf.freecol.common.model.ModelMessage;
-import net.sf.freecol.common.model.Player;
-import net.sf.freecol.common.model.Player.NoClaimReason;
-import net.sf.freecol.common.model.ProductionInfo;
-import net.sf.freecol.common.model.Specification;
-import net.sf.freecol.common.model.StringTemplate;
-import net.sf.freecol.common.model.Tile;
-import net.sf.freecol.common.model.TileType;
-import net.sf.freecol.common.model.TradeRoute;
-import net.sf.freecol.common.model.Unit;
-import net.sf.freecol.common.model.UnitLocation.NoAddReason;
-import net.sf.freecol.common.model.UnitType;
 
 
 /**

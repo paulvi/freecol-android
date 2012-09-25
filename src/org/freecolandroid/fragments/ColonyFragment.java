@@ -26,6 +26,9 @@ import net.sf.freecol.client.gui.i18n.Messages;
 import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.BuildableType;
 import net.sf.freecol.common.model.Colony;
+import net.sf.freecol.common.model.Goods;
+import net.sf.freecol.common.model.GoodsContainer;
+import net.sf.freecol.common.model.GoodsType;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.resources.ResourceManager;
 
@@ -41,8 +44,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -79,6 +84,32 @@ public class ColonyFragment extends FreeColFragment {
         
         // Update the building grid
         updateBuildingInfo();
+        
+        // Update the warehouse display
+        updateWarehouse();
+    }
+
+    private void updateWarehouse() {
+        LinearLayout warehouseContainer = (LinearLayout) getView().findViewById(
+                R.id.warehouse_container);
+        warehouseContainer.removeAllViews();
+        GoodsContainer container = mColony.getGoodsContainer();
+        for (GoodsType goodsType : mColony.getSpecification().getGoodsTypeList()) {
+            if (goodsType.isStorable()) {
+                Goods goods = container.getGoods(goodsType);
+                Bitmap icon = mClient.getGUI().getImageLibrary().getGoodsImage(goods.getType(), 1f)
+                        .getBitmap();
+                String amount = Integer.toString(goods.getAmount());
+                View goodsView = getActivity().getLayoutInflater().inflate(
+                        R.layout.list_item_goods, warehouseContainer, false);
+                ImageView iconView = (ImageView) goodsView.findViewById(R.id.icon);
+                iconView.setImageBitmap(icon);
+                TextView amountView = (TextView) goodsView.findViewById(R.id.amount);
+                amountView.setText(amount);
+                warehouseContainer.addView(goodsView, new LayoutParams(
+                      LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            }
+        }
     }
 
     private void updateBuildingInfo() {
