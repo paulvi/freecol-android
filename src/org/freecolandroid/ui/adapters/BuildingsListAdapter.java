@@ -51,22 +51,6 @@ import android.widget.TextView;
 
 public class BuildingsListAdapter extends BaseAdapter implements OnDragListener, OnTouchListener {
 
-    private static class UnitInfo {
-
-        final Unit unit;
-
-        final View unitView;
-
-        final View buildingView;
-
-        public UnitInfo(Unit unit, View unitView, View buildingView) {
-            this.unit = unit;
-            this.unitView = unitView;
-            this.buildingView = buildingView;
-        }
-
-    }
-
     private final List<Building> mBuildings;
 
     private final Context mContext;
@@ -144,7 +128,7 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
                     .getBitmap();
             ImageView unitView = new ImageView(mContext);
             unitView.setOnTouchListener(this);
-            unitView.setTag(new UnitInfo(unit, unitView, convertView));
+            unitView.setTag(unit);
             unitView.setLayoutParams(new LayoutParams(40, 40));
             unitView.setImageBitmap(unitIcon);
             unitsInBuilding.addView(unitView);
@@ -156,10 +140,10 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
     @Override
     public boolean onDrag(View v, DragEvent event) {
         if (event.getAction() == DragEvent.ACTION_DROP) {
-            UnitInfo unitInfo = (UnitInfo) event.getLocalState();
-            if (unitInfo.buildingView != v) {
-                Building newBuilding = (Building) v.getTag();
-                assignUnitToBuilding(unitInfo.unit, newBuilding);
+            Unit unit = (Unit) event.getLocalState();
+            Building targetBuilding = (Building) v.getTag();
+            if (unit.getWorkBuilding() != targetBuilding) {
+                assignUnitToBuilding(unit, targetBuilding);
                 notifyDataSetInvalidated();
             }
         }
@@ -169,9 +153,9 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            UnitInfo unitInfo = (UnitInfo) v.getTag();
+            Unit unit = (Unit) v.getTag();
             v.startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(v),
-                    unitInfo, 0);
+                    unit, 0);
         }
         return true;
     }
