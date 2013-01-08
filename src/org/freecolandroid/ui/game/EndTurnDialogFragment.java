@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments.dialogs;
+package org.freecolandroid.ui.game;
 
 import java.util.List;
 
@@ -27,6 +27,7 @@ import net.sf.freecol.common.model.Unit;
 
 import org.freecolandroid.R;
 import org.freecolandroid.repackaged.javax.swing.ImageIcon;
+import org.freecolandroid.ui.FreeColDialogFragment;
 
 import android.app.Dialog;
 import android.os.Bundle;

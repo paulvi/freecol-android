@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments;
+package org.freecolandroid.ui.menu;
 
 import java.io.IOException;
 
@@ -27,6 +27,7 @@ import net.sf.freecol.common.model.NationOptions.Advantages;
 import net.sf.freecol.common.model.Specification;
 
 import org.freecolandroid.R;
+import org.freecolandroid.ui.FreeColFragment;
 
 import android.os.Bundle;
 import android.util.Log;

@@ -17,21 +17,30 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments;
+package org.freecolandroid.ui.menu;
 
-import net.sf.freecol.client.FreeColClient;
-import net.sf.freecol.client.gui.ImageLibrary;
+import org.freecolandroid.R;
+
+import android.app.Activity;
 import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public abstract class FreeColFragment extends Fragment {
+public class SplashScreenFragment extends Fragment {
 	
-	protected FreeColClient mClient;
-
-	public void setClient(FreeColClient client) {
-		this.mClient = client;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.frag_splash, container, false);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+		activity.getActionBar().hide();
 	}
 
-	protected ImageLibrary getImageLibrary() {
-		return mClient.getGUI().getImageLibrary();
-	}
 }

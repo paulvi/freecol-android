@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments;
+package org.freecolandroid.ui.menu;
 
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.gui.action.ActionManager;
@@ -28,8 +28,8 @@ import net.sf.freecol.client.gui.action.PreferencesAction;
 import net.sf.freecol.client.gui.action.QuitAction;
 
 import org.freecolandroid.R;
-import org.freecolandroid.fragments.dialogs.OpenFileFragment;
 import org.freecolandroid.integration.ButtonAction;
+import org.freecolandroid.ui.FreeColFragment;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;

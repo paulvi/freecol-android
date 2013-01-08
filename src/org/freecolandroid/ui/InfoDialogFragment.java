@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments.dialogs;
+package org.freecolandroid.ui;
 
 import net.sf.freecol.client.gui.i18n.Messages;
 

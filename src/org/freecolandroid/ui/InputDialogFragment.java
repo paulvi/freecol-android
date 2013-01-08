@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments.dialogs;
+package org.freecolandroid.ui;
 
 import org.freecolandroid.R;
 import org.freecolandroid.debug.FCLog;

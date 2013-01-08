@@ -17,25 +17,21 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments.dialogs;
+package org.freecolandroid.ui;
 
 import net.sf.freecol.client.FreeColClient;
-import android.app.DialogFragment;
+import net.sf.freecol.client.gui.ImageLibrary;
+import android.app.Fragment;
 
-public class FreeColDialogFragment extends DialogFragment {
-	
-	public interface DialogListener {
-		
-		void onPositiveSelected();
-		
-		void onNegativeSelected();
-		
-	}
+public abstract class FreeColFragment extends Fragment {
 	
 	protected FreeColClient mClient;
-	
-	public void setClient(FreeColClient freeColClient) {
-		mClient = freeColClient;
+
+	public void setClient(FreeColClient client) {
+		this.mClient = client;
 	}
 
+	protected ImageLibrary getImageLibrary() {
+		return mClient.getGUI().getImageLibrary();
+	}
 }

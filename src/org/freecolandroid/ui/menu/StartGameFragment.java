@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments;
+package org.freecolandroid.ui.menu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +35,7 @@ import net.sf.freecol.common.model.Player;
 
 import org.freecolandroid.R;
 import org.freecolandroid.repackaged.java.awt.Image;
+import org.freecolandroid.ui.FreeColFragment;
 
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;

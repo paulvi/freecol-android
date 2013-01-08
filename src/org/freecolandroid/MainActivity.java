@@ -21,10 +21,10 @@ package org.freecolandroid;
 
 import java.io.File;
 
-import org.freecolandroid.fragments.GameFragment;
-import org.freecolandroid.fragments.dialogs.GameMenuFragment;
 import org.freecolandroid.repackaged.java.awt.GraphicsConfiguration;
 import org.freecolandroid.repackaged.javax.swing.SwingUtilities;
+import org.freecolandroid.ui.game.GameFragment;
+import org.freecolandroid.ui.menu.GameMenuFragment;
 
 import net.sf.freecol.FreeCol;
 import android.app.Activity;

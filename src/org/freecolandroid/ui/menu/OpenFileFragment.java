@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments.dialogs;
+package org.freecolandroid.ui.menu;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import net.sf.freecol.client.gui.i18n.Messages;
 
 import org.freecolandroid.R;
 import org.freecolandroid.debug.FCLog;
+import org.freecolandroid.ui.FreeColDialogFragment;
 
 import android.app.Dialog;
 import android.content.Context;

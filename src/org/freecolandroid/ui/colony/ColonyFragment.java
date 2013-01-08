@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments;
+package org.freecolandroid.ui.colony;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +34,11 @@ import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
 import org.freecolandroid.repackaged.java.awt.Image;
-import org.freecolandroid.ui.ColonyMapCanvas;
+import org.freecolandroid.ui.FreeColFragment;
 import org.freecolandroid.ui.adapters.BuildingsListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.ConstructionProgress;
+import org.freecolandroid.views.ColonyMapCanvas;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;

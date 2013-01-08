@@ -96,10 +96,10 @@ import net.sf.freecol.common.option.BooleanOption;
 import net.sf.freecol.server.FreeColServer;
 
 import org.freecolandroid.debug.FCLog;
-import org.freecolandroid.fragments.dialogs.FreeColDialogFragment.DialogListener;
-import org.freecolandroid.fragments.dialogs.InputDialogFragment.InputDialogListener;
 import org.freecolandroid.repackaged.javax.swing.ImageIcon;
 import org.freecolandroid.repackaged.javax.swing.SwingUtilities;
+import org.freecolandroid.ui.FreeColDialogFragment.DialogListener;
+import org.freecolandroid.ui.InputDialogFragment.InputDialogListener;
 
 
 

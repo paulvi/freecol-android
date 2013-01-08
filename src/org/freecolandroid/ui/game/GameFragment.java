@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments;
+package org.freecolandroid.ui.game;
 
 import java.util.List;
 
@@ -33,7 +33,8 @@ import net.sf.freecol.common.model.Unit;
 import org.freecolandroid.R;
 import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.javax.swing.ImageIcon;
-import org.freecolandroid.ui.GameCanvas;
+import org.freecolandroid.ui.FreeColFragment;
+import org.freecolandroid.views.GameCanvas;
 
 import android.app.Activity;
 import android.os.AsyncTask;

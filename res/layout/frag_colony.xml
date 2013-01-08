@@ -16,7 +16,7 @@
         android:layout_marginBottom="20dp"
         android:gravity="left" />
 
-    <org.freecolandroid.ui.ColonyMapCanvas
+    <org.freecolandroid.views.ColonyMapCanvas
         android:id="@+id/colony_canvas"
         android:layout_width="460dp"
         android:layout_height="200dp"

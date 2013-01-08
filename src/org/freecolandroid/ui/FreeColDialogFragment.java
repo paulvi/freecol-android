@@ -17,30 +17,25 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.fragments;
+package org.freecolandroid.ui;
 
-import org.freecolandroid.R;
+import net.sf.freecol.client.FreeColClient;
+import android.app.DialogFragment;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-public class SplashScreenFragment extends Fragment {
+public class FreeColDialogFragment extends DialogFragment {
 	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.frag_splash, container, false);
+	public interface DialogListener {
+		
+		void onPositiveSelected();
+		
+		void onNegativeSelected();
+		
 	}
 	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		
-		activity.getActionBar().hide();
+	protected FreeColClient mClient;
+	
+	public void setClient(FreeColClient freeColClient) {
+		mClient = freeColClient;
 	}
 
 }
