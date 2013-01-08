@@ -146,7 +146,7 @@ public class GameFragment extends FreeColFragment implements MapViewerListener,
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		
+
 		activity.getActionBar().show();
 	}
 
@@ -167,6 +167,12 @@ public class GameFragment extends FreeColFragment implements MapViewerListener,
 		return inflater.inflate(R.layout.frag_game, container, false);
 	}
 
+	@Override
+	public void onResume() {
+	    super.onResume();
+	    getActivity().getActionBar().setTitle(R.string.app_name);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();

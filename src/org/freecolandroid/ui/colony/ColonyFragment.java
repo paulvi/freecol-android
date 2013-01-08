@@ -71,9 +71,8 @@ public class ColonyFragment extends FreeColFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TextView title = (TextView) getView().findViewById(R.id.title);
-        title.setText(mColony.getName());
-
+        getActivity().getActionBar().setTitle(mColony.getName());
+        
         ColonyMapCanvas canvas = (ColonyMapCanvas) getView().findViewById(R.id.colony_canvas);
         canvas.init(mClient, mColony);
 
