@@ -33,10 +33,15 @@ import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
@@ -44,7 +49,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class BuildingsListAdapter extends BaseAdapter {
+public class BuildingsListAdapter extends BaseAdapter implements OnDragListener, OnTouchListener {
+
+    private static class UnitInfo {
+
+        final Unit unit;
+
+        final View unitView;
+
+        final View buildingView;
+
+        public UnitInfo(Unit unit, View unitView, View buildingView) {
+            this.unit = unit;
+            this.unitView = unitView;
+            this.buildingView = buildingView;
+        }
+
+    }
 
     private final List<Building> mBuildings;
 
@@ -79,8 +100,10 @@ public class BuildingsListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item_building,
                     parent, false);
+            convertView.setOnDragListener(this);
         }
         Building building = mBuildings.get(position);
+        convertView.setTag(building);
         ImageView buildingImage = (ImageView) convertView.findViewById(R.id.building_image);
         buildingImage.setImageBitmap(ResourceManager
                 .getImage(building.getType().getId() + ".image").getBitmap());
@@ -120,12 +143,41 @@ public class BuildingsListAdapter extends BaseAdapter {
             Bitmap unitIcon = mClient.getGUI().getImageLibrary().getUnitImageIcon(unit).getImage()
                     .getBitmap();
             ImageView unitView = new ImageView(mContext);
+            unitView.setOnTouchListener(this);
+            unitView.setTag(new UnitInfo(unit, unitView, convertView));
             unitView.setLayoutParams(new LayoutParams(40, 40));
             unitView.setImageBitmap(unitIcon);
             unitsInBuilding.addView(unitView);
         }
 
         return convertView;
+    }
+
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+        if (event.getAction() == DragEvent.ACTION_DROP) {
+            UnitInfo unitInfo = (UnitInfo) event.getLocalState();
+            if (unitInfo.buildingView != v) {
+                Building newBuilding = (Building) v.getTag();
+                assignUnitToBuilding(unitInfo.unit, newBuilding);
+                notifyDataSetInvalidated();
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            UnitInfo unitInfo = (UnitInfo) v.getTag();
+            v.startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(v),
+                    unitInfo, 0);
+        }
+        return true;
+    }
+
+    private void assignUnitToBuilding(Unit unit, Building building) {
+        mClient.getInGameController().work(unit, building);
     }
 
 }
