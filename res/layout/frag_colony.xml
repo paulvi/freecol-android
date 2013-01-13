@@ -146,6 +146,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal" />
 
 </RelativeLayout>

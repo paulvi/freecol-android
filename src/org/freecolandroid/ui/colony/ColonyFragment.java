@@ -41,6 +41,7 @@ import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.Constructi
 import org.freecolandroid.views.ColonyMapCanvas;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,8 +105,21 @@ public class ColonyFragment extends FreeColFragment {
                         R.layout.list_item_goods, warehouseContainer, false);
                 ImageView iconView = (ImageView) goodsView.findViewById(R.id.icon);
                 iconView.setImageBitmap(icon);
+                // Amount
                 TextView amountView = (TextView) goodsView.findViewById(R.id.amount);
                 amountView.setText(amount);
+                // Production (change)
+                TextView changeView = (TextView) goodsView.findViewById(R.id.change);
+                int change = mColony.getAdjustedNetProductionOf(goodsType);
+                if (change > 0) {
+                    changeView.setTextColor(Color.GREEN);
+                } else if (change < 0) {
+                    changeView.setTextColor(Color.RED);
+                } else {
+                    // No production surplus/shortage
+                    changeView.setVisibility(View.GONE);
+                }
+                changeView.setText(change > 0? "+" + change : Integer.toString(change));
                 warehouseContainer.addView(goodsView, new LayoutParams(
                       LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             }
