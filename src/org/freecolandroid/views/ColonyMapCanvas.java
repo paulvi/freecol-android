@@ -184,6 +184,15 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
                             drawProduction(tile.getProduction(), canvas, tileWidth * 2,
                                     tileHeight * 2);
                         }
+                        List<Unit> workUnits = tile.getUnitList();
+                        if (workUnits != null && !workUnits.isEmpty()) {
+                            canvas.restore();
+                            canvas.save();
+                            Unit unit = workUnits.get(0);
+                            Bitmap unitIcon = library.getUnitImageIcon(unit).getImage().getBitmap();
+                            canvas.translate(xx + tileWidth - unitIcon.getWidth() / 2, yy);
+                            canvas.drawBitmap(unitIcon, 0, 0, mPaint);
+                        }
                         canvas.restore();
                     }
                 }
