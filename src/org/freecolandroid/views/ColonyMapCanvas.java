@@ -22,24 +22,36 @@ package org.freecolandroid.views;
 import static org.freecolandroid.Constants.LOG_TAG;
 
 import java.util.List;
+import java.util.Locale;
 
+import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.ImageLibrary;
+import net.sf.freecol.client.gui.i18n.Messages;
 import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.Colony;
 import net.sf.freecol.common.model.ColonyTile;
+import net.sf.freecol.common.model.GoodsType;
+import net.sf.freecol.common.model.Player;
+import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.Map.Direction;
+import net.sf.freecol.common.model.Player.NoClaimReason;
+import net.sf.freecol.common.model.UnitLocation.NoAddReason;
 import net.sf.freecol.common.model.Tile;
 import net.sf.freecol.common.model.TileType;
+import net.sf.freecol.common.model.Unit;
 
+import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.java.awt.Color;
 import org.freecolandroid.repackaged.java.awt.Graphics2D;
+import org.freecolandroid.ui.colony.OnUnitLocationUpdatedListener;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
@@ -94,6 +106,8 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
     private Graphics2D mGraphics;
 
     private Paint mPaint;
+
+    private OnUnitLocationUpdatedListener mListener;
 
     public ColonyMapCanvas(Context context) {
         super(context);
@@ -232,12 +246,137 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         case DragEvent.ACTION_DRAG_STARTED:
             return true;
         case DragEvent.ACTION_DROP:
-            Toast.makeText(getContext(), "Dragged unit to map", Toast.LENGTH_SHORT).show();
+            Unit unit = (Unit) event.getLocalState();
+            handleUnitDrop(unit, (int) event.getX(), (int) event.getY());
             return true;
         default:
             return true;
         }
 
+    }
+
+    private void handleUnitDrop(Unit unit, int x, int y) {
+        FCLog.log("Unit dropped at x=" + x + ", y=" + y);
+        // Find the tile that the unit was dropped on
+        Rect tileRect = new Rect();
+        TileType tileType = mColony.getTile().getType();
+        ImageLibrary library = mClient.getGUI().getImageLibrary();
+        int tileWidth = library.getTerrainImageWidth(tileType) / 2;
+        int tileHeight = library.getTerrainImageHeight(tileType) / 2;
+        // Draw terrain and improvements (fields, roads)
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (mTiles[i][j] != null) {
+                    int xx = ((2 - i) + j) * tileWidth;
+                    int yy = (i + j) * tileHeight;
+                    tileRect.set(xx, yy, xx + 2 * tileWidth, yy + 2 * tileHeight);
+                    if (tileRect.contains(x, y)) {
+                        FCLog.log("Possible drag target x=" + i + ", j=" + j);
+                        if (tileContains(x - tileRect.left, y - tileRect.top, 2 * tileWidth,
+                                2 * tileHeight)) {
+                            FCLog.log("Confirmed drag target x=" + i + ", j=" + j);
+                            ColonyTile workTile = mColony.getColonyTile(mTiles[i][j]);
+                            tryWork(workTile, unit);
+                            mListener.unitLocationUpdated(unit, workTile);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean tileContains(int px, int py, int tileWidth, int tileHeight) {
+        int dx = Math.abs(tileWidth / 2 - px);
+        int dy = Math.abs(tileHeight / 2 - py);
+        return (dx + tileWidth * dy / tileHeight) <= tileWidth / 2;
+    }
+
+    /**
+     * Try to work this tile with a specified unit.
+     * 
+     * @param unit
+     *            The <code>Unit</code> to work the tile.
+     * @return True if the unit succeeds.
+     */
+    private boolean tryWork(ColonyTile colonyTile, Unit unit) {
+        Tile tile = colonyTile.getWorkTile();
+        Player player = unit.getOwner();
+
+        if (tile.getOwningSettlement() != mColony) {
+            // Need to acquire the tile before working it.
+            NoClaimReason claim = player.canClaimForSettlementReason(tile);
+            switch (claim) {
+            case NONE:
+            case NATIVES:
+                if (mClient.getInGameController().claimLand(tile, mColony, 0)
+                        && tile.getOwningSettlement() == mColony) {
+                    FCLog.log("Colony " + mColony.getName() + " claims tile " + tile.toString()
+                            + " with unit " + unit.getId());
+                } else {
+                    FCLog.log("Colony " + mColony.getName() + " did not claim " + tile.toString()
+                            + " with unit " + unit.getId());
+                    return false;
+                }
+                break;
+            default: // Otherwise, can not use land
+                mClient.getGUI().errorMessage(
+                        "noClaimReason." + claim.toString().toLowerCase(Locale.US));
+                return false;
+            }
+            // Check reason again, claim should be satisfied.
+            if (tile.getOwningSettlement() != mColony) {
+                throw new IllegalStateException("Claim failed");
+            }
+        }
+
+        // Claim sorted, but complain about other failure.
+        NoAddReason reason = colonyTile.getNoAddReason(unit);
+        if (reason != NoAddReason.NONE) {
+            mClient.getGUI()
+                    .errorMessage("noAddReason." + reason.toString().toLowerCase(Locale.US));
+            return false;
+        }
+
+        // Choose the work to be done.
+        // FTM, do not change the work type unless explicitly
+        // told to as this destroys experience (TODO: allow
+        // multiple experience accumulation?).
+        GoodsType workType = unit.getWorkType();
+        if (workType == null) {
+            // Try to use expertise, then tile-specific
+            workType = unit.getType().getExpertProduction();
+            if (workType == null) {
+                workType = colonyTile.getWorkType(unit);
+            }
+        }
+        // Set the unit to work. Note this might upgrade the
+        // unit, and possibly even change its work type as the
+        // server has the right to maintain consistency.
+        mClient.getInGameController().work(unit, colonyTile);
+        // Now recheck, and see if we want to change to the
+        // expected work type.
+        if (workType != null && workType != unit.getWorkType()) {
+            mClient.getInGameController().changeWorkType(unit, workType);
+        }
+
+        if (mClient.getClientOptions().getBoolean(ClientOptions.SHOW_NOT_BEST_TILE)) {
+            ColonyTile best = mColony.getVacantColonyTileFor(unit, false, workType);
+            if (best != null
+                    && colonyTile != best
+                    && (colonyTile.getProductionOf(unit, workType) < best.getProductionOf(unit,
+                            workType))) {
+                StringTemplate template = StringTemplate.template("colonyPanel.notBestTile")
+                        .addStringTemplate("%unit%", Messages.getLabel(unit))
+                        .add("%goods%", workType.getNameKey())
+                        .addStringTemplate("%tile%", best.getLabel());
+                mClient.getGUI().showInformationMessage(template);
+            }
+        }
+        return true;
+    }
+
+    public void setOnUnitLocationUpdatedListener(OnUnitLocationUpdatedListener listener) {
+        mListener = listener;
     }
 
 }

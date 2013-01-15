@@ -30,6 +30,8 @@ import net.sf.freecol.common.model.Goods;
 import net.sf.freecol.common.model.GoodsContainer;
 import net.sf.freecol.common.model.GoodsType;
 import net.sf.freecol.common.model.StringTemplate;
+import net.sf.freecol.common.model.Unit;
+import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
@@ -53,7 +55,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ColonyFragment extends FreeColFragment {
+public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpdatedListener {
 
     private Colony mColony;
 
@@ -73,19 +75,24 @@ public class ColonyFragment extends FreeColFragment {
         super.onActivityCreated(savedInstanceState);
 
         getActivity().getActionBar().setTitle(mColony.getName());
-        
+
         ColonyMapCanvas canvas = (ColonyMapCanvas) getView().findViewById(R.id.colony_canvas);
         canvas.init(mClient, mColony);
+        canvas.setOnUnitLocationUpdatedListener(this);
 
+        refresh();
+    }
+
+    private void refresh() {
         // Update the population info views
         updatePopulationInfo();
 
         // Update current production info
         updateProductionInfo();
-        
+
         // Update the building grid
         updateBuildingInfo();
-        
+
         // Update the warehouse display
         updateWarehouse();
     }
@@ -119,16 +126,18 @@ public class ColonyFragment extends FreeColFragment {
                     // No production surplus/shortage
                     changeView.setVisibility(View.GONE);
                 }
-                changeView.setText(change > 0? "+" + change : Integer.toString(change));
-                warehouseContainer.addView(goodsView, new LayoutParams(
-                      LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                changeView.setText(change > 0 ? "+" + change : Integer.toString(change));
+                warehouseContainer.addView(goodsView, new LayoutParams(LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT));
             }
         }
     }
 
     private void updateBuildingInfo() {
         GridView buildingGrid = (GridView) getView().findViewById(R.id.buildig_grid);
-        buildingGrid.setAdapter(new BuildingsListAdapter(getActivity(), mClient, mColony));
+        BuildingsListAdapter adapter = new BuildingsListAdapter(getActivity(), mClient, mColony);
+        adapter.setOnUnitLocationUpdatedListener(this);
+        buildingGrid.setAdapter(adapter);
     }
 
     private void updatePopulationInfo() {
@@ -201,5 +210,10 @@ public class ColonyFragment extends FreeColFragment {
                     amountProduced));
         }
         currentProductionProgress.setAdapter(new ConstructionProgressListAdapter(list));
+    }
+
+    @Override
+    public void unitLocationUpdated(Unit unit, WorkLocation location) {
+        refresh();
     }
 }

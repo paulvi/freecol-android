@@ -1290,7 +1290,7 @@ public class GUI {
      * Updates the label displaying the current amount of gold.
      */
     public void updateGoldLabel() {
-        frame.getJMenuBar().repaint();
+//        frame.getJMenuBar().repaint();
     }
 
     public void updateMapGeneratorOptions() {

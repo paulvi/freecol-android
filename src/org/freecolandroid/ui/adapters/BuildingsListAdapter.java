@@ -32,6 +32,7 @@ import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
+import org.freecolandroid.ui.colony.OnUnitLocationUpdatedListener;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -56,6 +57,8 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
     private final Context mContext;
 
     private final FreeColClient mClient;
+
+    private OnUnitLocationUpdatedListener mListener;
 
     public BuildingsListAdapter(Context context, FreeColClient client, Colony colony) {
         mBuildings = colony.getBuildings();
@@ -144,7 +147,7 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
             Building targetBuilding = (Building) v.getTag();
             if (unit.getWorkBuilding() != targetBuilding) {
                 assignUnitToBuilding(unit, targetBuilding);
-                notifyDataSetInvalidated();
+                mListener.unitLocationUpdated(unit, targetBuilding);
             }
         }
         return true;
@@ -162,6 +165,10 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
 
     private void assignUnitToBuilding(Unit unit, Building building) {
         mClient.getInGameController().work(unit, building);
+    }
+
+    public void setOnUnitLocationUpdatedListener(OnUnitLocationUpdatedListener listener) {
+        mListener = listener;
     }
 
 }
