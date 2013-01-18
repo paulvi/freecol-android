@@ -46,6 +46,7 @@ import org.freecolandroid.repackaged.java.awt.Color;
 import org.freecolandroid.repackaged.java.awt.Graphics2D;
 import org.freecolandroid.ui.colony.OnUnitLocationUpdatedListener;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -55,9 +56,14 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.view.SurfaceHolder.Callback;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class ColonyMapCanvas extends SurfaceView implements Callback {
@@ -264,9 +270,44 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            // Check if we are tapping a Tile and if that tile contains an Unit
+            ColonyTile workTile = getColonyTileAt((int) event.getX(), (int) event.getY());
+            if (workTile != null) {
+                List<Unit> units = workTile.getUnitList();
+                if (units != null && !units.isEmpty()) {
+                    Unit unit = units.get(0);
+                    ImageView dragView = new ImageView(getContext());
+                    dragView.setImageBitmap(mClient.getGUI().getImageLibrary()
+                            .getUnitImageIcon(unit).getImage().getBitmap());
+                    startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(
+                            dragView), unit, 0);
+                }
+
+            }
+        }
+        return true;
+    }
+
     private void handleUnitDrop(Unit unit, int x, int y) {
         FCLog.log("Unit dropped at x=" + x + ", y=" + y);
         // Find the tile that the unit was dropped on
+        ColonyTile workTile = getColonyTileAt(x, y);
+        if (workTile != null) {
+            tryWork(workTile, unit);
+            mListener.unitLocationUpdated(unit, workTile);
+        }
+    }
+
+    private boolean tileContains(int px, int py, int tileWidth, int tileHeight) {
+        int dx = Math.abs(tileWidth / 2 - px);
+        int dy = Math.abs(tileHeight / 2 - py);
+        return (dx + tileWidth * dy / tileHeight) <= tileWidth / 2;
+    }
+
+    private ColonyTile getColonyTileAt(int x, int y) {
         Rect tileRect = new Rect();
         TileType tileType = mColony.getTile().getType();
         ImageLibrary library = mClient.getGUI().getImageLibrary();
@@ -280,24 +321,15 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
                     int yy = (i + j) * tileHeight;
                     tileRect.set(xx, yy, xx + 2 * tileWidth, yy + 2 * tileHeight);
                     if (tileRect.contains(x, y)) {
-                        FCLog.log("Possible drag target x=" + i + ", j=" + j);
                         if (tileContains(x - tileRect.left, y - tileRect.top, 2 * tileWidth,
                                 2 * tileHeight)) {
-                            FCLog.log("Confirmed drag target x=" + i + ", j=" + j);
-                            ColonyTile workTile = mColony.getColonyTile(mTiles[i][j]);
-                            tryWork(workTile, unit);
-                            mListener.unitLocationUpdated(unit, workTile);
+                            return mColony.getColonyTile(mTiles[i][j]);
                         }
                     }
                 }
             }
         }
-    }
-
-    public boolean tileContains(int px, int py, int tileWidth, int tileHeight) {
-        int dx = Math.abs(tileWidth / 2 - px);
-        int dy = Math.abs(tileHeight / 2 - py);
-        return (dx + tileWidth * dy / tileHeight) <= tileWidth / 2;
+        return null;
     }
 
     /**
