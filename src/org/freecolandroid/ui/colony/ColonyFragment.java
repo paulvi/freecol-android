@@ -40,7 +40,6 @@ import org.freecolandroid.ui.FreeColFragment;
 import org.freecolandroid.ui.adapters.BuildingsListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.ConstructionProgress;
-import org.freecolandroid.views.ColonyMapCanvas;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

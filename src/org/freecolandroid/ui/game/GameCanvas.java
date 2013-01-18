@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.views;
+package org.freecolandroid.ui.game;
 
 import static org.freecolandroid.Constants.LOG_TAG;
 import net.sf.freecol.client.FreeColClient;

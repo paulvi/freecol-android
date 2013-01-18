@@ -34,7 +34,6 @@ import org.freecolandroid.R;
 import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.javax.swing.ImageIcon;
 import org.freecolandroid.ui.FreeColFragment;
-import org.freecolandroid.views.GameCanvas;
 
 import android.app.Activity;
 import android.os.AsyncTask;

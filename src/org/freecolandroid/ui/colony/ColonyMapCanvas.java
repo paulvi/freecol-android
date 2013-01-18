@@ -17,7 +17,7 @@
  *  along with FreeCol-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.freecolandroid.views;
+package org.freecolandroid.ui.colony;
 
 import static org.freecolandroid.Constants.LOG_TAG;
 
@@ -32,19 +32,18 @@ import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.Colony;
 import net.sf.freecol.common.model.ColonyTile;
 import net.sf.freecol.common.model.GoodsType;
-import net.sf.freecol.common.model.Player;
-import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.Map.Direction;
+import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.Player.NoClaimReason;
-import net.sf.freecol.common.model.UnitLocation.NoAddReason;
+import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.Tile;
 import net.sf.freecol.common.model.TileType;
 import net.sf.freecol.common.model.Unit;
+import net.sf.freecol.common.model.UnitLocation.NoAddReason;
 
 import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.java.awt.Color;
 import org.freecolandroid.repackaged.java.awt.Graphics2D;
-import org.freecolandroid.ui.colony.OnUnitLocationUpdatedListener;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -58,13 +57,10 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.View;
 import android.view.SurfaceHolder.Callback;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class ColonyMapCanvas extends SurfaceView implements Callback {
 
@@ -82,7 +78,6 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
                     canvas = mHolder.lockCanvas();
                     onDraw(canvas);
                 } catch (Exception e) {
-                    // mRunning = false;
                     Log.w(LOG_TAG, "Exception while drawing", e);
                 } finally {
                     if (canvas != null) {

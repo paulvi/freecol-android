@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
-    <org.freecolandroid.views.GameCanvas
+    <org.freecolandroid.ui.game.GameCanvas
         android:id="@+id/canvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
