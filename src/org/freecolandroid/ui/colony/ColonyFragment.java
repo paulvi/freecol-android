@@ -36,7 +36,6 @@ import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
-import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.java.awt.Image;
 import org.freecolandroid.ui.FreeColFragment;
 import org.freecolandroid.ui.RefreshRequestListener;
@@ -47,8 +46,10 @@ import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.Constructi
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnDragListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.GridView;
@@ -57,7 +58,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpdatedListener, RefreshRequestListener {
+public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpdatedListener,
+        RefreshRequestListener {
 
     private Colony mColony;
 
@@ -81,8 +83,28 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
         ColonyMapCanvas canvas = (ColonyMapCanvas) getView().findViewById(R.id.colony_canvas);
         canvas.init(mClient, mColony, (ImageView) getView().findViewById(R.id.dragShadow));
         canvas.setOnUnitLocationUpdatedListener(this);
+
+        // Setup the drag listener to catch short "click" drags of units
+        View view = getView().findViewById(R.id.rebel_shield);
+        view.setOnDragListener(new OnDragListener() {
+
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
+                    UnitDragHolder dragHolder = (UnitDragHolder) event.getLocalState();
+                    if (dragHolder.getDragDuration() < 200) {
+                        // Show the work picker dialog
+                        WorkPickerDialogFragment dialog = WorkPickerDialogFragment.newInstance(
+                                mClient, mColony, dragHolder.unit, ColonyFragment.this);
+                        dialog.show(getFragmentManager(), null);
+                    }
+                }
+                return true;
+            }
+        });
+
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
@@ -222,11 +244,12 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
     @Override
     public void unitLocationUpdated(Unit unit, WorkLocation location) {
         refresh();
-        if (location instanceof ColonyTile) {
-            // Show the work picker dialog
-            WorkPickerDialogFragment dialog = WorkPickerDialogFragment.newInstance(mClient, mColony, unit, this);
-            dialog.show(getFragmentManager(), null);
-        }
+        // if (location instanceof ColonyTile) {
+        // // Show the work picker dialog
+        // WorkPickerDialogFragment dialog =
+        // WorkPickerDialogFragment.newInstance(mClient, mColony, unit, this);
+        // dialog.show(getFragmentManager(), null);
+        // }
     }
 
     @Override

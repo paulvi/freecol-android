@@ -32,6 +32,7 @@ import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.Colony;
 import net.sf.freecol.common.model.ColonyTile;
 import net.sf.freecol.common.model.GoodsType;
+import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.model.Map.Direction;
 import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.Player.NoClaimReason;
@@ -256,8 +257,9 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         case DragEvent.ACTION_DRAG_STARTED:
             return true;
         case DragEvent.ACTION_DROP:
-            Unit unit = (Unit) event.getLocalState();
-            handleUnitDrop(unit, (int) event.getX(), (int) event.getY());
+            UnitDragHolder dragHolder = (UnitDragHolder) event.getLocalState();
+            Unit unit = dragHolder.unit;
+            handleUnitDrop(unit, dragHolder.origin, (int) event.getX(), (int) event.getY());
             return true;
         default:
             return true;
@@ -276,8 +278,9 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
                     Unit unit = units.get(0);
                     mDragShadowView.setImageBitmap(mClient.getGUI().getImageLibrary()
                             .getUnitImageIcon(unit).getImage().getBitmap());
+                    UnitDragHolder dragHolder = new UnitDragHolder(unit, workTile);
                     startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(
-                            mDragShadowView), unit, 0);
+                            mDragShadowView), dragHolder, 0);
                 }
 
             }
@@ -285,11 +288,11 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         return true;
     }
 
-    private void handleUnitDrop(Unit unit, int x, int y) {
+    private void handleUnitDrop(Unit unit, WorkLocation origin, int x, int y) {
         FCLog.log("Unit dropped at x=" + x + ", y=" + y);
         // Find the tile that the unit was dropped on
         ColonyTile workTile = getColonyTileAt(x, y);
-        if (workTile != null) {
+        if (workTile != null && workTile != origin) {
             boolean canWork = tryWork(workTile, unit);
             if (canWork) {
                 mListener.unitLocationUpdated(unit, workTile);

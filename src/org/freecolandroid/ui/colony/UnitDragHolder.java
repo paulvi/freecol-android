@@ -22,8 +22,21 @@ package org.freecolandroid.ui.colony;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.model.WorkLocation;
 
-public interface OnUnitLocationUpdatedListener {
+public class UnitDragHolder {
     
-    void unitLocationUpdated(Unit unit, WorkLocation location);
+    public final Unit unit;
+    
+    public final WorkLocation origin;
+    
+    public final long dragStart;
 
+    public UnitDragHolder(Unit unit, WorkLocation origin) {
+        this.unit = unit;
+        this.origin = origin;
+        dragStart = System.currentTimeMillis();
+    }
+    
+    public long getDragDuration() {
+        return System.currentTimeMillis() - dragStart;
+    }
 }

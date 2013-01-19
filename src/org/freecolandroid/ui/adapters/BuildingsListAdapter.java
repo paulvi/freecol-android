@@ -33,6 +33,7 @@ import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
 import org.freecolandroid.ui.colony.OnUnitLocationUpdatedListener;
+import org.freecolandroid.ui.colony.UnitDragHolder;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -146,9 +147,10 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
     @Override
     public boolean onDrag(View v, DragEvent event) {
         if (event.getAction() == DragEvent.ACTION_DROP) {
-            Unit unit = (Unit) event.getLocalState();
+            UnitDragHolder dragHolder = (UnitDragHolder) event.getLocalState();
+            Unit unit = dragHolder.unit;
             Building targetBuilding = (Building) v.getTag();
-            if (unit.getWorkBuilding() != targetBuilding) {
+            if (dragHolder.origin != targetBuilding) {
                 assignUnitToBuilding(unit, targetBuilding);
                 mListener.unitLocationUpdated(unit, targetBuilding);
             }
@@ -162,8 +164,9 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
             Unit unit = (Unit) v.getTag();
             mDragShadowView.setImageBitmap(mClient.getGUI().getImageLibrary()
                     .getUnitImageIcon(unit).getImage().getBitmap());
+            UnitDragHolder dragHolder = new UnitDragHolder(unit, unit.getWorkBuilding());
             v.startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(mDragShadowView),
-                    unit, 0);
+                    dragHolder, 0);
         }
         return true;
     }
