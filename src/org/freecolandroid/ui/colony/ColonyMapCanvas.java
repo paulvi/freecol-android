@@ -110,6 +110,8 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
 
     private OnUnitLocationUpdatedListener mListener;
 
+    private ImageView mDragShadowView;
+
     public ColonyMapCanvas(Context context) {
         super(context);
 
@@ -124,12 +126,13 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         mHolder.addCallback(this);
     }
 
-    public void init(FreeColClient client, Colony colony) {
+    public void init(FreeColClient client, Colony colony, ImageView dragShadowView) {
         mPaint = new Paint();
         mPaint.setColor(android.graphics.Color.RED);
         mPaint.setStyle(Style.FILL);
         mPaint.setStrokeWidth(5);
 
+        mDragShadowView = dragShadowView;
         mClient = client;
         mColony = colony;
         mGraphics = new Graphics2D();
@@ -274,11 +277,10 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
                 List<Unit> units = workTile.getUnitList();
                 if (units != null && !units.isEmpty()) {
                     Unit unit = units.get(0);
-                    ImageView dragView = new ImageView(getContext());
-                    dragView.setImageBitmap(mClient.getGUI().getImageLibrary()
+                    mDragShadowView.setImageBitmap(mClient.getGUI().getImageLibrary()
                             .getUnitImageIcon(unit).getImage().getBitmap());
                     startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(
-                            dragView), unit, 0);
+                            mDragShadowView), unit, 0);
                 }
 
             }

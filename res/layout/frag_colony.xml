@@ -5,8 +5,13 @@
     android:background="@drawable/bg_paper"
     android:paddingLeft="50dp"
     android:paddingTop="20dp" >
+    
+    <ImageView
+        android:id="@+id/dragShadow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    <org.freecolandroid.views.ColonyMapCanvas
+    <org.freecolandroid.ui.colony.ColonyMapCanvas
         android:id="@+id/colony_canvas"
         android:layout_width="460dp"
         android:layout_height="200dp"

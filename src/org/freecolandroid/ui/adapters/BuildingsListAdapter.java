@@ -60,10 +60,13 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
 
     private OnUnitLocationUpdatedListener mListener;
 
-    public BuildingsListAdapter(Context context, FreeColClient client, Colony colony) {
+    private ImageView mDragShadowView;
+
+    public BuildingsListAdapter(Context context, FreeColClient client, Colony colony, ImageView dragShadowView) {
         mBuildings = colony.getBuildings();
         mContext = context;
         mClient = client;
+        mDragShadowView = dragShadowView;
         Collections.sort(mBuildings);
     }
 
@@ -157,7 +160,9 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             Unit unit = (Unit) v.getTag();
-            v.startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(v),
+            mDragShadowView.setImageBitmap(mClient.getGUI().getImageLibrary()
+                    .getUnitImageIcon(unit).getImage().getBitmap());
+            v.startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(mDragShadowView),
                     unit, 0);
         }
         return true;

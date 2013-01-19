@@ -76,7 +76,7 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
         getActivity().getActionBar().setTitle(mColony.getName());
 
         ColonyMapCanvas canvas = (ColonyMapCanvas) getView().findViewById(R.id.colony_canvas);
-        canvas.init(mClient, mColony);
+        canvas.init(mClient, mColony, (ImageView) getView().findViewById(R.id.dragShadow));
         canvas.setOnUnitLocationUpdatedListener(this);
 
         refresh();
@@ -134,7 +134,8 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
 
     private void updateBuildingInfo() {
         GridView buildingGrid = (GridView) getView().findViewById(R.id.buildig_grid);
-        BuildingsListAdapter adapter = new BuildingsListAdapter(getActivity(), mClient, mColony);
+        BuildingsListAdapter adapter = new BuildingsListAdapter(getActivity(), mClient, mColony,
+                (ImageView) getView().findViewById(R.id.dragShadow));
         adapter.setOnUnitLocationUpdatedListener(this);
         buildingGrid.setAdapter(adapter);
     }
