@@ -180,23 +180,20 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
                     if (mTiles[x][y] != null) {
                         int xx = ((2 - x) + y) * tileWidth;
                         int yy = (x + y) * tileHeight;
-                        canvas.save();
-                        canvas.translate(xx, yy);
                         ColonyTile tile = mColony.getColonyTile(mTiles[x][y]);
-                        if (tile.isColonyCenterTile()) {
-                            // Central tile containing the colony
-                            drawProduction(tile.getProduction(), canvas, tileWidth * 2,
-                                    tileHeight * 2);
-                        }
                         List<Unit> workUnits = tile.getUnitList();
                         if (workUnits != null && !workUnits.isEmpty()) {
-                            canvas.restore();
                             canvas.save();
                             Unit unit = workUnits.get(0);
                             Bitmap unitIcon = library.getUnitImageIcon(unit).getImage().getBitmap();
                             canvas.translate(xx + tileWidth - unitIcon.getWidth() / 2, yy);
                             canvas.drawBitmap(unitIcon, 0, 0, mPaint);
+                            canvas.restore();
                         }
+                        canvas.save();
+                        canvas.translate(xx, yy);
+                        // Central tile containing the colony
+                        drawProduction(tile.getProduction(), canvas, tileWidth * 2, tileHeight * 2);
                         canvas.restore();
                     }
                 }
