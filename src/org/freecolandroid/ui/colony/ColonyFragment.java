@@ -93,10 +93,7 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
                 if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
                     UnitDragHolder dragHolder = (UnitDragHolder) event.getLocalState();
                     if (dragHolder.getDragDuration() < 200) {
-                        // Show the work picker dialog
-                        WorkPickerDialogFragment dialog = WorkPickerDialogFragment.newInstance(
-                                mClient, mColony, dragHolder.unit, ColonyFragment.this);
-                        dialog.show(getFragmentManager(), null);
+                        showWorkPicker(dragHolder.unit);
                     }
                 }
                 return true;
@@ -123,6 +120,13 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
 
         // Update the warehouse display
         updateWarehouse();
+    }
+
+    private void showWorkPicker(Unit unit) {
+        // Show the work picker dialog
+        WorkPickerDialogFragment dialog = WorkPickerDialogFragment.newInstance(mClient, mColony,
+                unit, ColonyFragment.this);
+        dialog.show(getFragmentManager(), null);
     }
 
     private void updateWarehouse() {
@@ -244,12 +248,10 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
     @Override
     public void unitLocationUpdated(Unit unit, WorkLocation location) {
         refresh();
-        // if (location instanceof ColonyTile) {
-        // // Show the work picker dialog
-        // WorkPickerDialogFragment dialog =
-        // WorkPickerDialogFragment.newInstance(mClient, mColony, unit, this);
-        // dialog.show(getFragmentManager(), null);
-        // }
+        if (location instanceof ColonyTile && (unit.getWorkType() == null
+                || unit.getWorkTile().getProductionOf(unit, unit.getWorkType()) == 0)) {
+            showWorkPicker(unit);
+        }
     }
 
     @Override
