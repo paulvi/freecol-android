@@ -26,6 +26,7 @@ import net.sf.freecol.client.gui.i18n.Messages;
 import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.BuildableType;
 import net.sf.freecol.common.model.Colony;
+import net.sf.freecol.common.model.ColonyTile;
 import net.sf.freecol.common.model.Goods;
 import net.sf.freecol.common.model.GoodsContainer;
 import net.sf.freecol.common.model.GoodsType;
@@ -35,8 +36,10 @@ import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
+import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.java.awt.Image;
 import org.freecolandroid.ui.FreeColFragment;
+import org.freecolandroid.ui.RefreshRequestListener;
 import org.freecolandroid.ui.adapters.BuildingsListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.ConstructionProgress;
@@ -54,7 +57,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpdatedListener {
+public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpdatedListener, RefreshRequestListener {
 
     private Colony mColony;
 
@@ -78,7 +81,11 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
         ColonyMapCanvas canvas = (ColonyMapCanvas) getView().findViewById(R.id.colony_canvas);
         canvas.init(mClient, mColony, (ImageView) getView().findViewById(R.id.dragShadow));
         canvas.setOnUnitLocationUpdatedListener(this);
-
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
         refresh();
     }
 
@@ -214,6 +221,16 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
 
     @Override
     public void unitLocationUpdated(Unit unit, WorkLocation location) {
+        refresh();
+        if (location instanceof ColonyTile) {
+            // Show the work picker dialog
+            WorkPickerDialogFragment dialog = WorkPickerDialogFragment.newInstance(mClient, mColony, unit, this);
+            dialog.show(getFragmentManager(), null);
+        }
+    }
+
+    @Override
+    public void onRefreshRequested() {
         refresh();
     }
 }

@@ -293,8 +293,10 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         // Find the tile that the unit was dropped on
         ColonyTile workTile = getColonyTileAt(x, y);
         if (workTile != null) {
-            tryWork(workTile, unit);
-            mListener.unitLocationUpdated(unit, workTile);
+            boolean canWork = tryWork(workTile, unit);
+            if (canWork) {
+                mListener.unitLocationUpdated(unit, workTile);
+            }
         }
     }
 

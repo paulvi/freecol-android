@@ -95,10 +95,10 @@ import org.freecolandroid.repackaged.javax.swing.JFrame;
 import org.freecolandroid.repackaged.javax.swing.JInternalFrame;
 import org.freecolandroid.repackaged.javax.swing.filechooser.FileFilter;
 import org.freecolandroid.ui.ConfirmDialogFragment;
+import org.freecolandroid.ui.FreeColDialogFragment.DialogListener;
 import org.freecolandroid.ui.InfoDialogFragment;
 import org.freecolandroid.ui.InputDialogFragment;
 import org.freecolandroid.ui.MessageDialogFragment;
-import org.freecolandroid.ui.FreeColDialogFragment.DialogListener;
 import org.freecolandroid.ui.colony.ColonyFragment;
 import org.freecolandroid.ui.game.EndTurnDialogFragment;
 import org.freecolandroid.ui.game.GameFragment;
@@ -109,6 +109,7 @@ import org.freecolandroid.ui.menu.StartGameFragment;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 
@@ -815,8 +816,11 @@ public class GUI {
     }
     
     private void showInformationMessage(String message, ImageIcon icon) {
-		InfoDialogFragment f = InfoDialogFragment.newInstance(message, icon
-				.getImage().getBitmap());
+        Bitmap bitmap = null;
+        if (icon != null && icon.getImage() != null) {
+            bitmap = icon.getImage().getBitmap();
+        }
+		InfoDialogFragment f = InfoDialogFragment.newInstance(message, bitmap);
     	f.show(freeColClient.getActivity().getFragmentManager(), "");
     }
 
