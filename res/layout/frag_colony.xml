@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_paper"
-    android:paddingLeft="50dp"
-    android:paddingTop="20dp" >
-    
+    android:padding="20dp" >
+
     <ImageView
         android:id="@+id/dragShadow"
         android:layout_width="wrap_content"
@@ -27,6 +26,7 @@
         android:layout_alignTop="@id/colony_canvas"
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/colony_canvas"
+        android:background="@drawable/pane_bg_bevel"
         android:columnWidth="180dp"
         android:numColumns="auto_fit" />
 
@@ -147,11 +147,79 @@
 
     <LinearLayout
         android:id="@+id/warehouse_container"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/warehouse_container"
+        android:layout_below="@id/production_info"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.333"
+            android:background="@drawable/pane_bg_bevel"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/inPortTitle"
+                style="@style/ColonyDetailsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" />
+
+            <GridView
+                android:id="@+id/inPortGrid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/inPortTitle" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.333"
+            android:background="@drawable/pane_bg_bevel"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/cargoTitle"
+                style="@style/ColonyDetailsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Cargo" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.333"
+            android:background="@drawable/pane_bg_bevel"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/outsideColonyTitle"
+                style="@style/ColonyDetailsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Outside colony" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

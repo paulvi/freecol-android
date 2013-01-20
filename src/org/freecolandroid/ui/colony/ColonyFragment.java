@@ -120,6 +120,22 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
 
         // Update the warehouse display
         updateWarehouse();
+
+        // Update the list of ships/carriers in port
+        updateInPortInfo();
+    }
+
+    private void updateInPortInfo() {
+        TextView title = (TextView) getView().findViewById(R.id.inPortTitle);
+        title.setText(Messages.message("inPort"));
+        GridView inPortGrid = (GridView) getView().findViewById(R.id.inPortGrid);
+        List<Unit> unitsInPort = new ArrayList<Unit>();
+        for (Unit unit : mColony.getTile().getUnitList()) {
+            if (unit.isCarrier()) {
+                unitsInPort.add(unit);
+            }
+        }
+        inPortGrid.setAdapter(new UnitListAdapter(unitsInPort, mClient));
     }
 
     private void showWorkPicker(Unit unit) {
@@ -248,8 +264,9 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
     @Override
     public void unitLocationUpdated(Unit unit, WorkLocation location) {
         refresh();
-        if (location instanceof ColonyTile && (unit.getWorkType() == null
-                || unit.getWorkTile().getProductionOf(unit, unit.getWorkType()) == 0)) {
+        if (location instanceof ColonyTile
+                && (unit.getWorkType() == null || unit.getWorkTile().getProductionOf(unit,
+                        unit.getWorkType()) == 0)) {
             showWorkPicker(unit);
         }
     }
