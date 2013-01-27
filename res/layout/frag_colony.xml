@@ -185,24 +185,13 @@
                 android:layout_below="@id/inPortTitle" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <org.freecolandroid.ui.colony.CargoView
+            android:id="@+id/cargo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="0.333"
-            android:background="@drawable/pane_bg_bevel"
-            android:padding="10dp" >
-
-            <TextView
-                android:id="@+id/cargoTitle"
-                style="@style/ColonyDetailsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="Cargo" />
-        </RelativeLayout>
+            android:layout_weight="0.333" />
 
         <RelativeLayout
             android:layout_width="0dp"

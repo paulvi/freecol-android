@@ -19,23 +19,33 @@
 
 package org.freecolandroid.ui.colony;
 
+import net.sf.freecol.common.model.Goods;
 import net.sf.freecol.common.model.Unit;
-import net.sf.freecol.common.model.WorkLocation;
 
-public class UnitDragHolder {
-    
+public class DragHolder {
+
     public final Unit unit;
-    
-    public final WorkLocation origin;
-    
+
+    public final Goods goods;
+
+    public final Object origin;
+
     public final long dragStart;
 
-    public UnitDragHolder(Unit unit, WorkLocation origin) {
+    public DragHolder(Unit unit, Object origin) {
         this.unit = unit;
         this.origin = origin;
+        goods = null;
         dragStart = System.currentTimeMillis();
     }
-    
+
+    public DragHolder(Goods goods, Object origin) {
+        this.unit = null;
+        this.origin = origin;
+        this.goods = goods;
+        dragStart = System.currentTimeMillis();
+    }
+
     public long getDragDuration() {
         return System.currentTimeMillis() - dragStart;
     }

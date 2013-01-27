@@ -32,7 +32,6 @@ import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.Colony;
 import net.sf.freecol.common.model.ColonyTile;
 import net.sf.freecol.common.model.GoodsType;
-import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.model.Map.Direction;
 import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.Player.NoClaimReason;
@@ -41,6 +40,7 @@ import net.sf.freecol.common.model.Tile;
 import net.sf.freecol.common.model.TileType;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.model.UnitLocation.NoAddReason;
+import net.sf.freecol.common.model.WorkLocation;
 
 import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.java.awt.Color;
@@ -95,11 +95,11 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
 
     }
 
-    private Tile[][] mTiles = new Tile[3][3];
+    private final Tile[][] mTiles = new Tile[3][3];
 
-    private PaintThread mPaintThread = new PaintThread();
+    private final PaintThread mPaintThread = new PaintThread();
 
-    private SurfaceHolder mHolder;
+    private final SurfaceHolder mHolder;
 
     private Colony mColony;
 
@@ -257,9 +257,10 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         case DragEvent.ACTION_DRAG_STARTED:
             return true;
         case DragEvent.ACTION_DROP:
-            UnitDragHolder dragHolder = (UnitDragHolder) event.getLocalState();
+            DragHolder dragHolder = (DragHolder) event.getLocalState();
             Unit unit = dragHolder.unit;
-            handleUnitDrop(unit, dragHolder.origin, (int) event.getX(), (int) event.getY());
+            handleUnitDrop(unit, (WorkLocation) dragHolder.origin, (int) event.getX(),
+                    (int) event.getY());
             return true;
         default:
             return true;
@@ -278,7 +279,7 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
                     Unit unit = units.get(0);
                     mDragShadowView.setImageBitmap(mClient.getGUI().getImageLibrary()
                             .getUnitImageIcon(unit).getImage().getBitmap());
-                    UnitDragHolder dragHolder = new UnitDragHolder(unit, workTile);
+                    DragHolder dragHolder = new DragHolder(unit, workTile);
                     startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(
                             mDragShadowView), dragHolder, 0);
                 }

@@ -43,13 +43,17 @@ import org.freecolandroid.ui.adapters.BuildingsListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.ConstructionProgress;
 
+import android.content.ClipData;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.GridView;
@@ -91,7 +95,7 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
-                    UnitDragHolder dragHolder = (UnitDragHolder) event.getLocalState();
+                    DragHolder dragHolder = (DragHolder) event.getLocalState();
                     if (dragHolder.getDragDuration() < 200) {
                         showWorkPicker(dragHolder.unit);
                     }
@@ -123,6 +127,22 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
 
         // Update the list of ships/carriers in port
         updateInPortInfo();
+
+        // Update the list of cargo on the selected carrier
+        updateCargoInfo();
+    }
+
+    private void updateCargoInfo() {
+        // TODO Use selection from the In Port panel to select which carrier to
+        // show
+        CargoView cargo = (CargoView) getView().findViewById(R.id.cargo);
+        cargo.init(mClient);
+        for (Unit unit : mColony.getTile().getUnitList()) {
+            if (unit.isCarrier()) {
+                cargo.setCarrier(unit);
+                break;
+            }
+        }
     }
 
     private void updateInPortInfo() {
@@ -152,12 +172,12 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
         GoodsContainer container = mColony.getGoodsContainer();
         for (GoodsType goodsType : mColony.getSpecification().getGoodsTypeList()) {
             if (goodsType.isStorable()) {
-                Goods goods = container.getGoods(goodsType);
+                final Goods goods = container.getGoods(goodsType);
                 Bitmap icon = getImageLibrary().getGoodsImage(goods.getType(), 1f).getBitmap();
                 String amount = Integer.toString(goods.getAmount());
                 View goodsView = getActivity().getLayoutInflater().inflate(
                         R.layout.list_item_goods, warehouseContainer, false);
-                ImageView iconView = (ImageView) goodsView.findViewById(R.id.icon);
+                final ImageView iconView = (ImageView) goodsView.findViewById(R.id.icon);
                 iconView.setImageBitmap(icon);
                 // Amount
                 TextView amountView = (TextView) goodsView.findViewById(R.id.amount);
@@ -174,8 +194,24 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
                     changeView.setVisibility(View.GONE);
                 }
                 changeView.setText(change > 0 ? "+" + change : Integer.toString(change));
+
+                // Setup drag & drop
+                goodsView.setOnTouchListener(new OnTouchListener() {
+
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            DragHolder holder = new DragHolder(goods, mColony);
+                            v.startDrag(ClipData.newPlainText("Drag", "Drag"),
+                                    new DragShadowBuilder(iconView), holder, 0);
+                        }
+                        return true;
+                    }
+                });
+
                 warehouseContainer.addView(goodsView, new LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT));
+
             }
         }
     }
