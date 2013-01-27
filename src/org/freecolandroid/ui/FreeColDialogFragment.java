@@ -20,22 +20,27 @@
 package org.freecolandroid.ui;
 
 import net.sf.freecol.client.FreeColClient;
+import net.sf.freecol.client.gui.ImageLibrary;
 import android.app.DialogFragment;
 
 public class FreeColDialogFragment extends DialogFragment {
-	
-	public interface DialogListener {
-		
-		void onPositiveSelected();
-		
-		void onNegativeSelected();
-		
-	}
-	
-	protected FreeColClient mClient;
-	
-	public void setClient(FreeColClient freeColClient) {
-		mClient = freeColClient;
-	}
+
+    public interface DialogListener {
+
+        void onPositiveSelected();
+
+        void onNegativeSelected();
+
+    }
+
+    protected FreeColClient mClient;
+
+    public void setClient(FreeColClient freeColClient) {
+        mClient = freeColClient;
+    }
+
+    protected ImageLibrary getImageLibrary() {
+        return mClient.getGUI().getImageLibrary();
+    }
 
 }

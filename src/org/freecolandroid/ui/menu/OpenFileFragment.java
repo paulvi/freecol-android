@@ -44,153 +44,149 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 public class OpenFileFragment extends FreeColDialogFragment {
-	
-	public static final String TAG = "OpenFileFragment";
-	
-	private static final String ARG_DIR = "directory";
-	
-	private static final String ARG_FILE_EXT = "file_extension";
-	
-	private File mSelectedFile;
-	
-	public static OpenFileFragment newInstance(String directory, String fileExt) {
-		FCLog.log("Starting Open File dialog, dir=" + directory + ", ext="
-				+ fileExt);
-		OpenFileFragment f = new OpenFileFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_DIR, directory);
-		args.putString(ARG_FILE_EXT, fileExt);
-		f.setArguments(args);
-		return f;
-	}
-	
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Dialog d = new Dialog(getActivity(), R.style.GameMenu);
-		d.setContentView(R.layout.frag_dialog_open_file);
-		return d;
-	}
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		File dir = new File(getArguments().getString(ARG_DIR));
-		String fileExt = getArguments().getString(ARG_FILE_EXT);
-		
-		final Button openButton = (Button) getDialog().findViewById(R.id.open);
-		
-		final ListView list = (ListView) getDialog().findViewById(R.id.file_list);
-		final DirectoryListAdapter adapter = new DirectoryListAdapter(
-				getActivity(), dir, fileExt);
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
+    public static final String TAG = "OpenFileFragment";
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				mSelectedFile = (File) adapter.getItem(position);
-				if (mSelectedFile.isDirectory()) {
-					adapter.setDirectory(mSelectedFile);
-					adapter.notifyDataSetInvalidated();
-					openButton.setEnabled(false);
-				} else {
-					openButton.setEnabled(true);
-				}
-				FCLog.log("Selected " + mSelectedFile.getName());
-			}
-		});
-		
-		TextView title = (TextView) getDialog().findViewById(R.id.open_title);
-		title.setText(Messages.message("openAction.name"));
+    private static final String ARG_DIR = "directory";
 
-		openButton.setText(Messages.message("openAction.name"));
-		openButton.setOnClickListener(new OnClickListener() {
+    private static final String ARG_FILE_EXT = "file_extension";
 
-			@Override
-			public void onClick(View v) {
-				dismiss();
-				AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+    private File mSelectedFile;
 
-					@Override
-					public void run() {
-						mClient.getInGameController().loadGame(mSelectedFile);
-					}
-				});
-			}
-		});
-	}
-	
-	private static class DirectoryListAdapter extends BaseAdapter {
-		
-		private final List<File> mFiles = new ArrayList<File>();
-		
-		private File mParentDirectory;
-		
-		private final Context mContext;
-		
-		private final String mFileExt;
-		
-		public DirectoryListAdapter(Context context, File directory, String fileExt) {
-			mContext = context;
-			mFileExt = fileExt;
-			setDirectory(directory);
-		}
-		
-		public void setDirectory(File directory) {
-			mFiles.clear();
-			mParentDirectory = directory.getParentFile();
-			if (mParentDirectory != null) {
-				mFiles.add(mParentDirectory);
-			}
-			File[] files = directory.listFiles();
-			if (files != null) {
-				for (File f : files) {
-					FCLog.log("Checking " + f.getName());
-					if (f.getName().endsWith(mFileExt) || f.isDirectory()) {
-						FCLog.log("Match");
-						mFiles.add(f);
-					} else {
-						FCLog.log("Not a match");
-					}
-				}
-			} else {
-				FCLog.log("Not a directory");
-			}
-		}
+    public static OpenFileFragment newInstance(String directory, String fileExt) {
+        FCLog.log("Starting Open File dialog, dir=" + directory + ", ext=" + fileExt);
+        OpenFileFragment f = new OpenFileFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_DIR, directory);
+        args.putString(ARG_FILE_EXT, fileExt);
+        f.setArguments(args);
+        return f;
+    }
 
-		@Override
-		public int getCount() {
-			return mFiles.size();
-		}
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog d = new Dialog(getActivity(), R.style.GameMenu);
+        d.setContentView(R.layout.frag_dialog_open_file);
+        return d;
+    }
 
-		@Override
-		public Object getItem(int position) {
-			return mFiles.get(position);
-		}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-		@Override
-		public long getItemId(int position) {
-			return 0;
-		}
+        File dir = new File(getArguments().getString(ARG_DIR));
+        String fileExt = getArguments().getString(ARG_FILE_EXT);
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = LayoutInflater.from(mContext).inflate(
-						R.layout.list_item_file, parent, false);
-			}
-			File file = mFiles.get(position);
-			TextView text = (TextView) convertView.findViewById(R.id.name);
-			if (file == mParentDirectory) {
-				text.setText("..");
-			} else {
-				text.setText(file.getName());
-			}
-			return convertView;
-		}
-		
-	}
+        final Button openButton = (Button) getDialog().findViewById(R.id.open);
+
+        final ListView list = (ListView) getDialog().findViewById(R.id.file_list);
+        final DirectoryListAdapter adapter = new DirectoryListAdapter(getActivity(), dir, fileExt);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedFile = (File) adapter.getItem(position);
+                if (mSelectedFile.isDirectory()) {
+                    adapter.setDirectory(mSelectedFile);
+                    adapter.notifyDataSetInvalidated();
+                    openButton.setEnabled(false);
+                } else {
+                    openButton.setEnabled(true);
+                }
+                FCLog.log("Selected " + mSelectedFile.getName());
+            }
+        });
+
+        TextView title = (TextView) getDialog().findViewById(R.id.open_title);
+        title.setText(Messages.message("openAction.name"));
+
+        openButton.setText(Messages.message("openAction.name"));
+        openButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mClient.getInGameController().loadGame(mSelectedFile);
+                    }
+                });
+            }
+        });
+    }
+
+    private static class DirectoryListAdapter extends BaseAdapter {
+
+        private final List<File> mFiles = new ArrayList<File>();
+
+        private File mParentDirectory;
+
+        private final Context mContext;
+
+        private final String mFileExt;
+
+        public DirectoryListAdapter(Context context, File directory, String fileExt) {
+            mContext = context;
+            mFileExt = fileExt;
+            setDirectory(directory);
+        }
+
+        public void setDirectory(File directory) {
+            mFiles.clear();
+            mParentDirectory = directory.getParentFile();
+            if (mParentDirectory != null) {
+                mFiles.add(mParentDirectory);
+            }
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    FCLog.log("Checking " + f.getName());
+                    if (f.getName().endsWith(mFileExt) || f.isDirectory()) {
+                        FCLog.log("Match");
+                        mFiles.add(f);
+                    } else {
+                        FCLog.log("Not a match");
+                    }
+                }
+            } else {
+                FCLog.log("Not a directory");
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return mFiles.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mFiles.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item_file,
+                        parent, false);
+            }
+            File file = mFiles.get(position);
+            TextView text = (TextView) convertView.findViewById(R.id.name);
+            if (file == mParentDirectory) {
+                text.setText("..");
+            } else {
+                text.setText(file.getName());
+            }
+            return convertView;
+        }
+
+    }
 }

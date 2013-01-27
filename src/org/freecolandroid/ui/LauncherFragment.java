@@ -33,33 +33,31 @@ import android.widget.Button;
 
 public class LauncherFragment extends Fragment {
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.frag_launcher, container, false);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.frag_launcher, container, false);
+    }
 
-		Button btn = (Button) getView().findViewById(R.id.start);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Button btn = (Button) getView().findViewById(R.id.start);
         btn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						System.out.println("Calling main()");
-						FreeCol.main(new String[] {}, getActivity());
-					}
-				}).start();
-				
-			}
-		});
-	}
-	
+
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        System.out.println("Calling main()");
+                        FreeCol.main(new String[] {}, getActivity());
+                    }
+                }).start();
+
+            }
+        });
+    }
+
 }

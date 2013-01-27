@@ -33,81 +33,80 @@ import android.widget.TextView;
 
 public class InputDialogFragment extends FreeColDialogFragment {
 
-	public interface InputDialogListener {
+    public interface InputDialogListener {
 
-		void onNegativeSelected();
+        void onNegativeSelected();
 
-		void onPositiveSelected(String value);
+        void onPositiveSelected(String value);
 
-	}
+    }
 
-	private static final String KEY_MESSAGE = "message";
+    private static final String KEY_MESSAGE = "message";
 
-	private static final String KEY_DEFAULT = "default";
+    private static final String KEY_DEFAULT = "default";
 
-	private static final String KEY_POSITIVE = "positive";
+    private static final String KEY_POSITIVE = "positive";
 
-	private static final String KEY_NEGATIVE = "negative";
+    private static final String KEY_NEGATIVE = "negative";
 
-	private static final String KEY_ALLOW_EMPTY = "allow_empty";
+    private static final String KEY_ALLOW_EMPTY = "allow_empty";
 
-	private InputDialogListener mListener;
+    private InputDialogListener mListener;
 
-	public static InputDialogFragment newInstance(String message,
-			String defaultValue, String positiveText, String negativeText,
-			boolean allowEmpty, InputDialogListener listener) {
-		InputDialogFragment f = new InputDialogFragment();
-		f.mListener = listener;
-		Bundle args = new Bundle();
-		args.putString(KEY_MESSAGE, message);
-		args.putString(KEY_DEFAULT, defaultValue);
-		args.putString(KEY_POSITIVE, positiveText);
-		args.putString(KEY_NEGATIVE, negativeText);
-		args.putBoolean(KEY_ALLOW_EMPTY, allowEmpty);
-		f.setArguments(args);
-		return f;
-	}
+    public static InputDialogFragment newInstance(String message, String defaultValue,
+            String positiveText, String negativeText, boolean allowEmpty,
+            InputDialogListener listener) {
+        InputDialogFragment f = new InputDialogFragment();
+        f.mListener = listener;
+        Bundle args = new Bundle();
+        args.putString(KEY_MESSAGE, message);
+        args.putString(KEY_DEFAULT, defaultValue);
+        args.putString(KEY_POSITIVE, positiveText);
+        args.putString(KEY_NEGATIVE, negativeText);
+        args.putBoolean(KEY_ALLOW_EMPTY, allowEmpty);
+        f.setArguments(args);
+        return f;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		final Bundle args = getArguments();
-		Dialog d = new Dialog(getActivity(), R.style.GameMenu);
-		d.setContentView(R.layout.frag_dialog_text_input);
-		d.setCancelable(false);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        final Bundle args = getArguments();
+        Dialog d = new Dialog(getActivity(), R.style.GameMenu);
+        d.setContentView(R.layout.frag_dialog_text_input);
+        d.setCancelable(false);
 
-		TextView message = (TextView) d.findViewById(R.id.message);
-		message.setText(args.getString(KEY_MESSAGE));
+        TextView message = (TextView) d.findViewById(R.id.message);
+        message.setText(args.getString(KEY_MESSAGE));
 
-		final EditText edit = (EditText) d.findViewById(R.id.input);
-		edit.setText(args.getString(KEY_DEFAULT));
+        final EditText edit = (EditText) d.findViewById(R.id.input);
+        edit.setText(args.getString(KEY_DEFAULT));
 
-		Button btn = (Button) d.findViewById(R.id.positive);
-		btn.setOnClickListener(new OnClickListener() {
+        Button btn = (Button) d.findViewById(R.id.positive);
+        btn.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				FCLog.log("Dialog - positive selected");
-				String value = edit.getText().toString();
-				if (!TextUtils.isEmpty(value)
-						|| args.getBoolean(KEY_ALLOW_EMPTY)) {
-					mListener.onPositiveSelected(value);
-					dismiss();
-				}
-			}
-		});
-		btn.setText(args.getString(KEY_POSITIVE));
-		btn = (Button) d.findViewById(R.id.negative);
-		btn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FCLog.log("Dialog - positive selected");
+                String value = edit.getText().toString();
+                if (!TextUtils.isEmpty(value) || args.getBoolean(KEY_ALLOW_EMPTY)) {
+                    mListener.onPositiveSelected(value);
+                    dismiss();
+                }
+            }
+        });
+        btn.setText(args.getString(KEY_POSITIVE));
+        btn = (Button) d.findViewById(R.id.negative);
+        btn.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				FCLog.log("Dialog - negative selected");
-				mListener.onNegativeSelected();
-				dismiss();
-			}
-		});
-		btn.setText(args.getString(KEY_NEGATIVE));
-		return d;
-	}
+            @Override
+            public void onClick(View v) {
+                FCLog.log("Dialog - negative selected");
+                mListener.onNegativeSelected();
+                dismiss();
+            }
+        });
+        btn.setText(args.getString(KEY_NEGATIVE));
+        return d;
+    }
 
 }

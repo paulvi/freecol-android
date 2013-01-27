@@ -24,14 +24,14 @@ import net.sf.freecol.client.gui.ImageLibrary;
 import android.app.Fragment;
 
 public abstract class FreeColFragment extends Fragment {
-	
-	protected FreeColClient mClient;
 
-	public void setClient(FreeColClient client) {
-		this.mClient = client;
-	}
+    protected FreeColClient mClient;
 
-	protected ImageLibrary getImageLibrary() {
-		return mClient.getGUI().getImageLibrary();
-	}
+    public void setClient(FreeColClient client) {
+        this.mClient = client;
+    }
+
+    protected ImageLibrary getImageLibrary() {
+        return mClient.getGUI().getImageLibrary();
+    }
 }

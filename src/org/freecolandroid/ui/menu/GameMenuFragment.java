@@ -35,44 +35,44 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class GameMenuFragment extends FreeColDialogFragment {
-	
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Dialog d = new Dialog(getActivity(), R.style.GameMenu);
-		d.setContentView(R.layout.frag_dialog_game_menu);
-		return d;
-	}
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		Button saveButton = (Button) getDialog().findViewById(R.id.save_game);
-		saveButton.setText(Messages.message("saveAction.name"));
-		saveButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				dismiss();
-				new ButtonAction(mClient.getActionManager().getFreeColAction(
-						SaveAction.id)).onClick(v);
-			}
-		});
-		
-		Button openButton = (Button) getDialog().findViewById(R.id.open);
-		openButton.setText(Messages.message("openAction.name"));
-		openButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				FragmentTransaction ft = getFragmentManager().beginTransaction();
-				ft.remove(GameMenuFragment.this);
-				OpenFileFragment openFragment = OpenFileFragment.newInstance(
-						FreeCol.getSaveDirectory().getAbsolutePath() + "/", ".fsg");
-				openFragment.setClient(mClient);
-				openFragment.show(ft, OpenFileFragment.TAG);
-			}
-		});
-	}
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog d = new Dialog(getActivity(), R.style.GameMenu);
+        d.setContentView(R.layout.frag_dialog_game_menu);
+        return d;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Button saveButton = (Button) getDialog().findViewById(R.id.save_game);
+        saveButton.setText(Messages.message("saveAction.name"));
+        saveButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                new ButtonAction(mClient.getActionManager().getFreeColAction(SaveAction.id))
+                        .onClick(v);
+            }
+        });
+
+        Button openButton = (Button) getDialog().findViewById(R.id.open);
+        openButton.setText(Messages.message("openAction.name"));
+        openButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.remove(GameMenuFragment.this);
+                OpenFileFragment openFragment = OpenFileFragment.newInstance(FreeCol
+                        .getSaveDirectory().getAbsolutePath() + "/", ".fsg");
+                openFragment.setClient(mClient);
+                openFragment.show(ft, OpenFileFragment.TAG);
+            }
+        });
+    }
 
 }

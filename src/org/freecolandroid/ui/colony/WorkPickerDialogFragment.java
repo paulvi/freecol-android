@@ -35,7 +35,6 @@ import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.Unit;
 
 import org.freecolandroid.R;
-import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.ui.FreeColDialogFragment;
 import org.freecolandroid.ui.RefreshRequestListener;
 
@@ -69,7 +68,8 @@ public class WorkPickerDialogFragment extends FreeColDialogFragment implements O
         return dialog;
     }
 
-    private void init(FreeColClient client, Colony colony, Unit unit, RefreshRequestListener listener) {
+    private void init(FreeColClient client, Colony colony, Unit unit,
+            RefreshRequestListener listener) {
         setClient(client);
         mUnit = unit;
         mColony = colony;
@@ -81,7 +81,7 @@ public class WorkPickerDialogFragment extends FreeColDialogFragment implements O
 
         ColonyTile also = (mUnit.getWorkLocation2() instanceof ColonyTile) ? (ColonyTile) mUnit
                 .getWorkLocation2() : null;
-        ImageLibrary imageLibrary = mClient.getGUI().getImageLibrary();
+        ImageLibrary imageLibrary = getImageLibrary();
 
         // Work in Field - automatically find the best location
         List<GoodsType> farmedGoods = mClient.getGame().getSpecification().getFarmedGoodsTypeList();
@@ -114,17 +114,16 @@ public class WorkPickerDialogFragment extends FreeColDialogFragment implements O
             case ALREADY_PRESENT:
                 GoodsType goodsType = building.getGoodsOutputType();
                 String locName = Messages.message(building.getNameKey());
-                
+
                 String text;
                 Bitmap icon;
                 if (goodsType != null) {
-                    StringTemplate t = StringTemplate
-                            .template("model.goods.goodsAmount")
-                            .addAmount("%amount%",
-                                    building.getAdditionalProductionNextTurn(mUnit))
+                    StringTemplate t = StringTemplate.template("model.goods.goodsAmount")
+                            .addAmount("%amount%", building.getAdditionalProductionNextTurn(mUnit))
                             .addName("%goods%", goodsType);
-                    text = locName + " (" + Messages.message(t) + ")"; 
-                    icon = imageLibrary.getScaledGoodsImageIcon(goodsType, 0.66f).getImage().getBitmap();
+                    text = locName + " (" + Messages.message(t) + ")";
+                    icon = imageLibrary.getScaledGoodsImageIcon(goodsType, 0.66f).getImage()
+                            .getBitmap();
                 } else {
                     // No goods produced, use the name of the location
                     text = locName;
@@ -155,7 +154,8 @@ public class WorkPickerDialogFragment extends FreeColDialogFragment implements O
         WorkItem item = mItems.get(position);
         InGameController inGameController = mClient.getInGameController();
         if (item.type == Type.BUILDING) {
-            BuildingType buildingType = mClient.getGame().getSpecification().getBuildingType(item.workId);
+            BuildingType buildingType = mClient.getGame().getSpecification()
+                    .getBuildingType(item.workId);
             Building building = mUnit.getColony().getBuilding(buildingType);
             if (building != mUnit.getLocation()) {
                 inGameController.work(mUnit, building);
@@ -174,7 +174,7 @@ public class WorkPickerDialogFragment extends FreeColDialogFragment implements O
         dismiss();
         mListener.onRefreshRequested();
     }
-    
+
     private static class WorkItem {
         final Bitmap icon;
         final String text;
@@ -188,10 +188,9 @@ public class WorkPickerDialogFragment extends FreeColDialogFragment implements O
             this.workId = workId;
         }
     }
-    
+
     private enum Type {
-        TILE,
-        BUILDING
+        TILE, BUILDING
     }
 
     private class WorkListAdapter extends BaseAdapter {
@@ -214,11 +213,12 @@ public class WorkPickerDialogFragment extends FreeColDialogFragment implements O
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_work_location, parent, false);
+                convertView = LayoutInflater.from(getActivity()).inflate(
+                        R.layout.list_item_work_location, parent, false);
             }
             ImageView iconView = (ImageView) convertView.findViewById(R.id.icon);
             TextView textView = (TextView) convertView.findViewById(R.id.text);
-            
+
             WorkItem item = mItems.get(position);
             iconView.setImageBitmap(item.icon);
             textView.setText(item.text);

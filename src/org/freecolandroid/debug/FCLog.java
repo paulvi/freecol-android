@@ -20,34 +20,35 @@
 package org.freecolandroid.debug;
 
 public final class FCLog {
-	
-	private FCLog() {}
-	
-	public static void log(Throwable t) {
-		System.out.println("********BEGIN EXCEPTION*********");
-		System.out.println("Throwable: " + t);
-		System.out.println("Message: " + t.getMessage());
-		System.out.println("Thread: " + Thread.currentThread().getName());
-		t.printStackTrace(System.out);
-		System.out.println("**********END EXCEPTION*********");
-	}
-	
-	public static void log(String msg, Throwable t) {
-		System.out.println("********BEGIN EXCEPTION*********");
-		System.out.println("Throwable: " + t);
-		System.out.println("Message1: " + msg);
-		System.out.println("Message2: " + t.getMessage());
-		System.out.println("Thread: " + Thread.currentThread().getName());
-		t.printStackTrace(System.out);
-		System.out.println("**********END EXCEPTION*********");
-	}
-	
-	public static void log(String msg) {
-		System.out.println(msg);
-	}
-	
-	public static void warn(String msg) {
-		System.err.println(msg);
-	}
+
+    private FCLog() {
+    }
+
+    public static void log(Throwable t) {
+        System.out.println("********BEGIN EXCEPTION*********");
+        System.out.println("Throwable: " + t);
+        System.out.println("Message: " + t.getMessage());
+        System.out.println("Thread: " + Thread.currentThread().getName());
+        t.printStackTrace(System.out);
+        System.out.println("**********END EXCEPTION*********");
+    }
+
+    public static void log(String msg, Throwable t) {
+        System.out.println("********BEGIN EXCEPTION*********");
+        System.out.println("Throwable: " + t);
+        System.out.println("Message1: " + msg);
+        System.out.println("Message2: " + t.getMessage());
+        System.out.println("Thread: " + Thread.currentThread().getName());
+        t.printStackTrace(System.out);
+        System.out.println("**********END EXCEPTION*********");
+    }
+
+    public static void log(String msg) {
+        System.out.println(msg);
+    }
+
+    public static void warn(String msg) {
+        System.err.println(msg);
+    }
 
 }

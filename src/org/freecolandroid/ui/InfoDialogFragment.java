@@ -33,46 +33,46 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class InfoDialogFragment extends FreeColDialogFragment {
-	
-	private static final String KEY_MESSAGE = "message";
-	
-	private static final String KEY_ICON = "icon";
-	
-	public static InfoDialogFragment newInstance(String message, Bitmap icon) {
-		InfoDialogFragment f = new InfoDialogFragment();
-		Bundle args = new Bundle();
-		args.putString(KEY_MESSAGE, message);
-		args.putParcelable(KEY_ICON, icon);
-		f.setArguments(args);
-		return f;
-	}
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Bundle args = getArguments();
-		Dialog d = new Dialog(getActivity(), R.style.GameMenu);
-		d.setContentView(R.layout.frag_dialog_info);
-		
-		TextView message = (TextView) d.findViewById(R.id.message);
-		message.setText(args.getString(KEY_MESSAGE));
-		
-		Bitmap iconData = args.getParcelable(KEY_ICON);
-		ImageView icon = (ImageView) d.findViewById(R.id.icon);
-		if (iconData != null) {
-			icon.setImageBitmap(iconData);
-		} else {
-			icon.setVisibility(View.GONE);
-		}
-		Button okButton = (Button) d.findViewById(R.id.ok);
-		okButton.setText(Messages.message("ok"));
-		okButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				dismiss();
-			}
-		});
-		
-		return d;
-	}
+    private static final String KEY_MESSAGE = "message";
+
+    private static final String KEY_ICON = "icon";
+
+    public static InfoDialogFragment newInstance(String message, Bitmap icon) {
+        InfoDialogFragment f = new InfoDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(KEY_MESSAGE, message);
+        args.putParcelable(KEY_ICON, icon);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        Dialog d = new Dialog(getActivity(), R.style.GameMenu);
+        d.setContentView(R.layout.frag_dialog_info);
+
+        TextView message = (TextView) d.findViewById(R.id.message);
+        message.setText(args.getString(KEY_MESSAGE));
+
+        Bitmap iconData = args.getParcelable(KEY_ICON);
+        ImageView icon = (ImageView) d.findViewById(R.id.icon);
+        if (iconData != null) {
+            icon.setImageBitmap(iconData);
+        } else {
+            icon.setVisibility(View.GONE);
+        }
+        Button okButton = (Button) d.findViewById(R.id.ok);
+        okButton.setText(Messages.message("ok"));
+        okButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        return d;
+    }
 }

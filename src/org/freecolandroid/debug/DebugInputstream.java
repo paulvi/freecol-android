@@ -23,68 +23,68 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DebugInputstream extends InputStream {
-	
-	private InputStream in;
-	
-	private String threadName;
 
-	public DebugInputstream(InputStream in, String threadName) {
-		this.in = in;
-		this.threadName = threadName;
-	}
+    private final InputStream in;
 
-	@Override
-	public int read() throws IOException {
-		FCLog.log(threadName + ".read");
-		return in.read();
-	}
+    private final String threadName;
 
-	@Override
-	public int available() throws IOException {
-		FCLog.log(threadName + ".available");
-		return in.available();
-	}
+    public DebugInputstream(InputStream in, String threadName) {
+        this.in = in;
+        this.threadName = threadName;
+    }
 
-	@Override
-	public void close() throws IOException {
-		FCLog.log(threadName + ".close");
-		in.close();
-	}
+    @Override
+    public int read() throws IOException {
+        // FCLog.log(threadName + ".read");
+        return in.read();
+    }
 
-	@Override
-	public void mark(int readlimit) {
-		FCLog.log(threadName + ".mark");
-		in.mark(readlimit);
-	}
+    @Override
+    public int available() throws IOException {
+        // FCLog.log(threadName + ".available");
+        return in.available();
+    }
 
-	@Override
-	public boolean markSupported() {
-		FCLog.log(threadName + ".marksupported");
-		return in.markSupported();
-	}
+    @Override
+    public void close() throws IOException {
+        // FCLog.log(threadName + ".close");
+        in.close();
+    }
 
-	@Override
-	public int read(byte[] buffer, int offset, int length) throws IOException {
-		FCLog.log(threadName + ".read1");
-		return in.read(buffer, offset, length);
-	}
+    @Override
+    public void mark(int readlimit) {
+        // FCLog.log(threadName + ".mark");
+        in.mark(readlimit);
+    }
 
-	@Override
-	public int read(byte[] buffer) throws IOException {
-		FCLog.log(threadName + ".read2");
-		return in.read(buffer);
-	}
+    @Override
+    public boolean markSupported() {
+        // FCLog.log(threadName + ".marksupported");
+        return in.markSupported();
+    }
 
-	@Override
-	public synchronized void reset() throws IOException {
-		FCLog.log(threadName + ".reset");
-		in.reset();
-	}
+    @Override
+    public int read(byte[] buffer, int offset, int length) throws IOException {
+        // FCLog.log(threadName + ".read1");
+        return in.read(buffer, offset, length);
+    }
 
-	@Override
-	public long skip(long byteCount) throws IOException {
-		FCLog.log(threadName + ".skip");
-		return in.skip(byteCount);
-	}
+    @Override
+    public int read(byte[] buffer) throws IOException {
+        // FCLog.log(threadName + ".read2");
+        return in.read(buffer);
+    }
+
+    @Override
+    public synchronized void reset() throws IOException {
+        // FCLog.log(threadName + ".reset");
+        in.reset();
+    }
+
+    @Override
+    public long skip(long byteCount) throws IOException {
+        // FCLog.log(threadName + ".skip");
+        return in.skip(byteCount);
+    }
 
 }

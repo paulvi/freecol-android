@@ -24,47 +24,46 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class DebugOutputStream extends OutputStream {
-	
-	private OutputStream out;
-	
-	private ByteArrayOutputStream buffer;
 
-	public DebugOutputStream(OutputStream out) {
-		this.out = out;
-		buffer = new ByteArrayOutputStream();
-	}
+    private final OutputStream out;
 
-	@Override
-	public void close() throws IOException {
-		out.close();
-		System.out.println("CLOSE - Buffer contents = " + buffer.toString());
-		buffer = new ByteArrayOutputStream();
-	}
+    private ByteArrayOutputStream buffer;
 
-	@Override
-	public void flush() throws IOException {
-		out.flush();
-		System.out.println("FLUSH - Buffer contents = " + buffer.toString());
-		buffer = new ByteArrayOutputStream();
-	}
+    public DebugOutputStream(OutputStream out) {
+        this.out = out;
+        buffer = new ByteArrayOutputStream();
+    }
 
-	@Override
-	public void write(byte[] buffer, int offset, int count) throws IOException {
-		out.write(buffer, offset, count);
-		this.buffer.write(buffer, offset, count);
-	}
+    @Override
+    public void close() throws IOException {
+        out.close();
+        // System.out.println("CLOSE - Buffer contents = " + buffer.toString());
+        buffer = new ByteArrayOutputStream();
+    }
 
-	@Override
-	public void write(byte[] buffer) throws IOException {
-		out.write(buffer);
-		this.buffer.write(buffer);
-	}
+    @Override
+    public void flush() throws IOException {
+        out.flush();
+        // System.out.println("FLUSH - Buffer contents = " + buffer.toString());
+        buffer = new ByteArrayOutputStream();
+    }
 
-	@Override
-	public void write(int oneByte) throws IOException {
-		out.write(oneByte);
-		buffer.write(oneByte);
-	}
+    @Override
+    public void write(byte[] buffer, int offset, int count) throws IOException {
+        out.write(buffer, offset, count);
+        this.buffer.write(buffer, offset, count);
+    }
 
+    @Override
+    public void write(byte[] buffer) throws IOException {
+        out.write(buffer);
+        this.buffer.write(buffer);
+    }
+
+    @Override
+    public void write(int oneByte) throws IOException {
+        out.write(oneByte);
+        buffer.write(oneByte);
+    }
 
 }

@@ -26,22 +26,22 @@ import android.view.View.OnClickListener;
 
 public class ButtonAction implements OnClickListener {
 
-	private FreeColAction action;
+    private final FreeColAction action;
 
-	public ButtonAction(FreeColAction action) {
-		this.action = action;
-	}
-	
-	@Override
-	public void onClick(View view) {
-		// Some Actions will perform operations that are blocking
-		AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
-			
-			@Override
-			public void run() {
-				action.actionPerformed(null);
-			}
-		});
-	}
+    public ButtonAction(FreeColAction action) {
+        this.action = action;
+    }
+
+    @Override
+    public void onClick(View view) {
+        // Some Actions will perform operations that are blocking
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+
+            @Override
+            public void run() {
+                action.actionPerformed(null);
+            }
+        });
+    }
 
 }

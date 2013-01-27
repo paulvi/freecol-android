@@ -36,81 +36,79 @@ import android.widget.TextView;
 
 public class ConstructionProgressListAdapter extends BaseAdapter {
 
-	public static class ConstructionProgress {
+    public static class ConstructionProgress {
 
-		public final Bitmap icon;
+        public final Bitmap icon;
 
-		public final int min;
+        public final int min;
 
-		public final int max;
+        public final int max;
 
-		public final int value;
+        public final int value;
 
-		public final int step;
+        public final int step;
 
-		public ConstructionProgress(Bitmap bitmap, int min, int max, int value,
-				int step) {
-			this.icon = bitmap;
-			this.min = min;
-			this.max = max;
-			this.value = value;
-			this.step = step;
-		}
+        public ConstructionProgress(Bitmap bitmap, int min, int max, int value, int step) {
+            this.icon = bitmap;
+            this.min = min;
+            this.max = max;
+            this.value = value;
+            this.step = step;
+        }
 
-	}
+    }
 
-	private final List<ConstructionProgress> mProgress;
+    private final List<ConstructionProgress> mProgress;
 
-	public ConstructionProgressListAdapter(List<ConstructionProgress> progress) {
-		mProgress = progress;
-	}
+    public ConstructionProgressListAdapter(List<ConstructionProgress> progress) {
+        mProgress = progress;
+    }
 
-	@Override
-	public int getCount() {
-		return mProgress.size();
-	}
+    @Override
+    public int getCount() {
+        return mProgress.size();
+    }
 
-	@Override
-	public Object getItem(int position) {
-		return mProgress.get(position);
-	}
+    @Override
+    public Object getItem(int position) {
+        return mProgress.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return 0;
-	}
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView == null) {
-			convertView = LayoutInflater.from(parent.getContext()).inflate(
-					R.layout.list_item_construction_progress, parent, false);
-		}
-		ConstructionProgress progress = mProgress.get(position);
-		ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
-		imageView.setImageBitmap(progress.icon);
-		TextView text = (TextView) convertView.findViewById(R.id.progress);
-		String stepSignal = (progress.step < 0) ? "-" : "+";
-		String progressString = String.valueOf(progress.value) + stepSignal
-				+ Math.abs(progress.step) + "/" + progress.max;
-		String turnsString = Messages.message("notApplicable.short");
-		if (progress.max <= progress.value) {
-			turnsString = "0";
-		} else if (progress.step > 0) {
-			// There is progress, find how many turns necessary with current
-			// production
-			int turns = (progress.max - progress.value) / progress.step;
-			if ((progress.max - progress.value) % progress.step > 0) {
-				turns++;
-			}
-			turnsString = Integer.toString(turns);
-		}
-		progressString += " "
-				+ Messages.message(StringTemplate.template(
-						"turnsToComplete.short").addName("%number%",
-						turnsString));
-		text.setText(progressString);
-		return convertView;
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.list_item_construction_progress, parent, false);
+        }
+        ConstructionProgress progress = mProgress.get(position);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
+        imageView.setImageBitmap(progress.icon);
+        TextView text = (TextView) convertView.findViewById(R.id.progress);
+        String stepSignal = (progress.step < 0) ? "-" : "+";
+        String progressString = String.valueOf(progress.value) + stepSignal
+                + Math.abs(progress.step) + "/" + progress.max;
+        String turnsString = Messages.message("notApplicable.short");
+        if (progress.max <= progress.value) {
+            turnsString = "0";
+        } else if (progress.step > 0) {
+            // There is progress, find how many turns necessary with current
+            // production
+            int turns = (progress.max - progress.value) / progress.step;
+            if ((progress.max - progress.value) % progress.step > 0) {
+                turns++;
+            }
+            turnsString = Integer.toString(turns);
+        }
+        progressString += " "
+                + Messages.message(StringTemplate.template("turnsToComplete.short").addName(
+                        "%number%", turnsString));
+        text.setText(progressString);
+        return convertView;
+    }
 
 }

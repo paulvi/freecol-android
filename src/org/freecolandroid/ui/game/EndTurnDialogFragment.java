@@ -41,105 +41,102 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 public class EndTurnDialogFragment extends FreeColDialogFragment {
-	
-	private List<Unit> mUnits;
-	
-	private DialogListener mListener;
 
-	public static EndTurnDialogFragment newInstance(List<Unit> units,
-			DialogListener listener) {
-		EndTurnDialogFragment f = new EndTurnDialogFragment();
-		f.mUnits = units;
-		f.mListener = listener;
-		return f;
-	}
-	
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Dialog d = new Dialog(getActivity(), R.style.GameMenu);
-		d.setContentView(R.layout.frag_dialog_end_turn);
-		
-		TextView title = (TextView) d.findViewById(R.id.title);
-		title.setText(Messages.message("endTurnDialog.name"));
-		
-		StringTemplate t = StringTemplate.template("endTurnDialog.areYouSure")
-				.addAmount("%number%", mUnits.size());
-		TextView message = (TextView) d.findViewById(R.id.message);
-		message.setText(Messages.message(t));
-		
-		Button okButton = (Button) d.findViewById(R.id.ok);
-		okButton.setText(Messages.message("ok"));
-		okButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mListener.onPositiveSelected();
-				dismiss();
-			}
-		});
-		
-		Button cancelButton = (Button) d.findViewById(R.id.cancel);
-		cancelButton.setText(Messages.message("cancel"));
-		cancelButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mListener.onNegativeSelected();
-				dismiss();
-			}
-		});
-		
-		ListView unitList = (ListView) d.findViewById(R.id.unit_list);
-		unitList.setAdapter(new UnitListAdapter());
-		
-		return d;
-	}
-	
-	private class UnitListAdapter extends BaseAdapter {
+    private List<Unit> mUnits;
 
-		@Override
-		public int getCount() {
-			return mUnits.size();
-		}
+    private DialogListener mListener;
 
-		@Override
-		public Object getItem(int position) {
-			return mUnits.get(position);
-		}
+    public static EndTurnDialogFragment newInstance(List<Unit> units, DialogListener listener) {
+        EndTurnDialogFragment f = new EndTurnDialogFragment();
+        f.mUnits = units;
+        f.mListener = listener;
+        return f;
+    }
 
-		@Override
-		public long getItemId(int position) {
-			return 0;
-		}
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog d = new Dialog(getActivity(), R.style.GameMenu);
+        d.setContentView(R.layout.frag_dialog_end_turn);
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = LayoutInflater.from(getActivity()).inflate(
-						R.layout.list_item_unit, parent, false);
-			}
-			
-			Unit unit = mUnits.get(position);
-			
-			// Unit icon
-			ImageIcon icon = mClient.getGUI().getImageLibrary()
-					.getUnitImageIcon(unit, 1.0);
-			ImageView unitIcon = (ImageView) convertView.findViewById(R.id.icon);
-			unitIcon.setImageBitmap(icon.getImage().getBitmap());
-			
-			// Name
-			TextView name = (TextView) convertView.findViewById(R.id.name);
-			name.setText(Messages.message(Messages.getLabel(unit)));
-			
-			// Location text
-			TextView description = (TextView) convertView.findViewById(R.id.description);
-			description.setText(Messages.message(unit.getLocation().getLocationName()));
-			
-			return convertView;
-		}
-		
-	}
+        TextView title = (TextView) d.findViewById(R.id.title);
+        title.setText(Messages.message("endTurnDialog.name"));
+
+        StringTemplate t = StringTemplate.template("endTurnDialog.areYouSure").addAmount(
+                "%number%", mUnits.size());
+        TextView message = (TextView) d.findViewById(R.id.message);
+        message.setText(Messages.message(t));
+
+        Button okButton = (Button) d.findViewById(R.id.ok);
+        okButton.setText(Messages.message("ok"));
+        okButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mListener.onPositiveSelected();
+                dismiss();
+            }
+        });
+
+        Button cancelButton = (Button) d.findViewById(R.id.cancel);
+        cancelButton.setText(Messages.message("cancel"));
+        cancelButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mListener.onNegativeSelected();
+                dismiss();
+            }
+        });
+
+        ListView unitList = (ListView) d.findViewById(R.id.unit_list);
+        unitList.setAdapter(new UnitListAdapter());
+
+        return d;
+    }
+
+    private class UnitListAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mUnits.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mUnits.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_unit,
+                        parent, false);
+            }
+
+            Unit unit = mUnits.get(position);
+
+            // Unit icon
+            ImageIcon icon = mClient.getGUI().getImageLibrary().getUnitImageIcon(unit, 1.0);
+            ImageView unitIcon = (ImageView) convertView.findViewById(R.id.icon);
+            unitIcon.setImageBitmap(icon.getImage().getBitmap());
+
+            // Name
+            TextView name = (TextView) convertView.findViewById(R.id.name);
+            name.setText(Messages.message(Messages.getLabel(unit)));
+
+            // Location text
+            TextView description = (TextView) convertView.findViewById(R.id.description);
+            description.setText(Messages.message(unit.getLocation().getLocationName()));
+
+            return convertView;
+        }
+
+    }
 
 }

@@ -38,60 +38,57 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
 
-
 public class NewGameFragment extends FreeColFragment {
-	
-	private Specification specification;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.frag_new_game, container, false);
-	}
+    private Specification specification;
 
-	public void setSpecification(Specification specification) {
-		if (specification == null) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.frag_new_game, container, false);
+    }
+
+    public void setSpecification(Specification specification) {
+        if (specification == null) {
             FreeColTcFile tcData;
-			try {
-				tcData = new FreeColTcFile("classic");
-				specification = tcData.getSpecification();
-			} catch (IOException e) {
-				Log.w(getTag(), e);
-			}
+            try {
+                tcData = new FreeColTcFile("classic");
+                specification = tcData.getSpecification();
+            } catch (IOException e) {
+                Log.w(getTag(), e);
+            }
         }
-		this.specification = specification;
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		
-		
-		final Spinner spinner = (Spinner) getView().findViewById(R.id.difficulty);
-		
-		Button btn = (Button) getView().findViewById(R.id.ok);
-		btn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				int level = spinner.getSelectedItemPosition();
-				startGame(level);
-			}
-		});
-	}
-	
-	private void startGame(final int difficulityLevel) {
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				ConnectController connectController = mClient.getConnectController();
-				specification.applyDifficultyLevel(difficulityLevel);
-				connectController.startSingleplayerGame(specification, "Player Name", Advantages.FIXED);
-			}
-			
-		}).start();
-	}
+        this.specification = specification;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final Spinner spinner = (Spinner) getView().findViewById(R.id.difficulty);
+
+        Button btn = (Button) getView().findViewById(R.id.ok);
+        btn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                int level = spinner.getSelectedItemPosition();
+                startGame(level);
+            }
+        });
+    }
+
+    private void startGame(final int difficulityLevel) {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                ConnectController connectController = mClient.getConnectController();
+                specification.applyDifficultyLevel(difficulityLevel);
+                connectController.startSingleplayerGame(specification, "Player Name",
+                        Advantages.FIXED);
+            }
+
+        }).start();
+    }
 
 }

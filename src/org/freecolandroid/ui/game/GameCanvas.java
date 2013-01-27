@@ -33,111 +33,110 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 
-
 public class GameCanvas extends SurfaceView implements Callback {
-	
-	private PaintThread mPaintThread = new PaintThread();
-	
-	private SurfaceHolder mHolder;
-	
-	private FreeColClient mClient;
 
-	public GameCanvas(Context context) {
-		super(context);
-		
-		mHolder = getHolder();
-		mHolder.addCallback(this);
-	}
-	
-	public GameCanvas(Context context, AttributeSet attrs) {
-		super(context, attrs);
+    private final PaintThread mPaintThread = new PaintThread();
 
-		mHolder = getHolder();
-		mHolder.addCallback(this);
-	}
-	
-	public void init(FreeColClient client) {
-		mClient = client;
-	}
-	
-	@Override
-	public void onWindowFocusChanged(boolean hasWindowFocus) {
-		super.onWindowFocusChanged(hasWindowFocus);
-		if (hasWindowFocus) {
-			mPaintThread.setPaused(false);
-		} else {
-			mPaintThread.setPaused(true);
-		}
-	}
-	
-	@Override
-	protected void onDraw(Canvas canvas) {
-		if (mClient != null && canvas != null) {
-			Graphics2D g2d = new Graphics2D(canvas);
-			mClient.getGUI().getCanvas().paintComponent(g2d);
-		}
-	}
+    private final SurfaceHolder mHolder;
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
-	}
+    private FreeColClient mClient;
 
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		mPaintThread.start();
-	}
+    public GameCanvas(Context context) {
+        super(context);
 
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		boolean retry = true;
-		mPaintThread.stopPainting();
-		while (retry) {
-			try {
-				mPaintThread.join();
-				retry = false;
-			} catch (InterruptedException e) {}
-		}
-	}
+        mHolder = getHolder();
+        mHolder.addCallback(this);
+    }
 
-	private class PaintThread extends Thread {
-		
-		private boolean mRunning = true;
-		
-		private boolean mPaused = false;
-		
-		public void stopPainting() {
-			mRunning = false;
-		}
-		
-		public void setPaused(boolean paused) {
-			mPaused = paused;
-		}
-		
-		@Override
-		public void run() {
-			Log.d(LOG_TAG, "GameCanvas.PaintThread.run() - start");
-			System.out.println();
-			Canvas canvas = null;
-			while (mRunning) {
-				if (!mPaused) {
-					try {
-						canvas = mHolder.lockCanvas();
-						onDraw(canvas);
-					} catch (Exception e) {
-	//					mRunning = false;
-						Log.w(LOG_TAG, "Exception while drawing", e);
-					} finally {
-						if (canvas != null) {
-							mHolder.unlockCanvasAndPost(canvas);
-						}
-					}
-				}
-			}
-			SystemClock.sleep(50);
-			Log.d(LOG_TAG, "GameCanvas.PaintThread.run() - stop");
-		}
-		
-	}
+    public GameCanvas(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        mHolder = getHolder();
+        mHolder.addCallback(this);
+    }
+
+    public void init(FreeColClient client) {
+        mClient = client;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        if (hasWindowFocus) {
+            mPaintThread.setPaused(false);
+        } else {
+            mPaintThread.setPaused(true);
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if (mClient != null && canvas != null) {
+            Graphics2D g2d = new Graphics2D(canvas);
+            mClient.getGUI().getCanvas().paintComponent(g2d);
+        }
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        mPaintThread.start();
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        boolean retry = true;
+        mPaintThread.stopPainting();
+        while (retry) {
+            try {
+                mPaintThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+
+    private class PaintThread extends Thread {
+
+        private boolean mRunning = true;
+
+        private boolean mPaused = false;
+
+        public void stopPainting() {
+            mRunning = false;
+        }
+
+        public void setPaused(boolean paused) {
+            mPaused = paused;
+        }
+
+        @Override
+        public void run() {
+            Log.d(LOG_TAG, "GameCanvas.PaintThread.run() - start");
+            System.out.println();
+            Canvas canvas = null;
+            while (mRunning) {
+                if (!mPaused) {
+                    try {
+                        canvas = mHolder.lockCanvas();
+                        onDraw(canvas);
+                    } catch (Exception e) {
+                        // mRunning = false;
+                        Log.w(LOG_TAG, "Exception while drawing", e);
+                    } finally {
+                        if (canvas != null) {
+                            mHolder.unlockCanvasAndPost(canvas);
+                        }
+                    }
+                }
+            }
+            SystemClock.sleep(50);
+            Log.d(LOG_TAG, "GameCanvas.PaintThread.run() - stop");
+        }
+
+    }
 
 }

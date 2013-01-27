@@ -28,29 +28,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class FullScreenMessageFragment extends FreeColFragment {
-	
-	public static FullScreenMessageFragment  getInstance(String message) {
-		FullScreenMessageFragment f = new FullScreenMessageFragment();
-		Bundle args = new Bundle();
-		args.putString("message", message);
-		f.setArguments(args);
-		return f;
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.frag_fullscreen_message, container, false);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
 
-		String message = getArguments().getString("message");
-		
-		TextView messageView = (TextView) getView().findViewById(R.id.message);
-		messageView.setText(message);
-	}
+    public static FullScreenMessageFragment getInstance(String message) {
+        FullScreenMessageFragment f = new FullScreenMessageFragment();
+        Bundle args = new Bundle();
+        args.putString("message", message);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.frag_fullscreen_message, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        String message = getArguments().getString("message");
+
+        TextView messageView = (TextView) getView().findViewById(R.id.message);
+        messageView.setText(message);
+    }
 
 }

@@ -153,8 +153,7 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
         for (GoodsType goodsType : mColony.getSpecification().getGoodsTypeList()) {
             if (goodsType.isStorable()) {
                 Goods goods = container.getGoods(goodsType);
-                Bitmap icon = mClient.getGUI().getImageLibrary().getGoodsImage(goods.getType(), 1f)
-                        .getBitmap();
+                Bitmap icon = getImageLibrary().getGoodsImage(goods.getType(), 1f).getBitmap();
                 String amount = Integer.toString(goods.getAmount());
                 View goodsView = getActivity().getLayoutInflater().inflate(
                         R.layout.list_item_goods, warehouseContainer, false);
@@ -253,8 +252,8 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
             int amountNeeded = requiredGoods.getAmount();
             int amountAvailable = mColony.getGoodsCount(requiredGoods.getType());
             int amountProduced = mColony.getAdjustedNetProductionOf(requiredGoods.getType());
-            Bitmap icon = mClient.getGUI().getImageLibrary()
-                    .getGoodsImageIcon(requiredGoods.getType()).getImage().getBitmap();
+            Bitmap icon = getImageLibrary().getGoodsImageIcon(requiredGoods.getType()).getImage()
+                    .getBitmap();
             list.add(new ConstructionProgress(icon, 0, amountNeeded, amountAvailable,
                     amountProduced));
         }
