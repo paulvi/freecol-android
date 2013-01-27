@@ -32,8 +32,8 @@ import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.resources.ResourceManager;
 
 import org.freecolandroid.R;
-import org.freecolandroid.ui.colony.OnUnitLocationUpdatedListener;
 import org.freecolandroid.ui.colony.DragHolder;
+import org.freecolandroid.ui.colony.OnColonyUpdatedListener;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -59,11 +59,12 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
 
     private final FreeColClient mClient;
 
-    private OnUnitLocationUpdatedListener mListener;
+    private OnColonyUpdatedListener mListener;
 
-    private ImageView mDragShadowView;
+    private final ImageView mDragShadowView;
 
-    public BuildingsListAdapter(Context context, FreeColClient client, Colony colony, ImageView dragShadowView) {
+    public BuildingsListAdapter(Context context, FreeColClient client, Colony colony,
+            ImageView dragShadowView) {
         mBuildings = colony.getBuildings();
         mContext = context;
         mClient = client;
@@ -146,14 +147,21 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
-        if (event.getAction() == DragEvent.ACTION_DROP) {
+        switch (event.getAction()) {
+        case DragEvent.ACTION_DRAG_STARTED:
+            DragHolder holder = (DragHolder) event.getLocalState();
+            return holder.unit != null;
+        case DragEvent.ACTION_DROP: {
             DragHolder dragHolder = (DragHolder) event.getLocalState();
             Unit unit = dragHolder.unit;
             Building targetBuilding = (Building) v.getTag();
             if (dragHolder.origin != targetBuilding) {
                 assignUnitToBuilding(unit, targetBuilding);
-                mListener.unitLocationUpdated(unit, targetBuilding);
+                mListener.onUnitLocationUpdated(unit, targetBuilding);
             }
+
+        }
+            break;
         }
         return true;
     }
@@ -165,8 +173,8 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
             mDragShadowView.setImageBitmap(mClient.getGUI().getImageLibrary()
                     .getUnitImageIcon(unit).getImage().getBitmap());
             DragHolder dragHolder = new DragHolder(unit, unit.getWorkBuilding());
-            v.startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(mDragShadowView),
-                    dragHolder, 0);
+            v.startDrag(ClipData.newPlainText("Drag", "Drag"), new View.DragShadowBuilder(
+                    mDragShadowView), dragHolder, 0);
         }
         return true;
     }
@@ -175,7 +183,7 @@ public class BuildingsListAdapter extends BaseAdapter implements OnDragListener,
         mClient.getInGameController().work(unit, building);
     }
 
-    public void setOnUnitLocationUpdatedListener(OnUnitLocationUpdatedListener listener) {
+    public void setOnUnitLocationUpdatedListener(OnColonyUpdatedListener listener) {
         mListener = listener;
     }
 

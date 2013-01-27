@@ -182,7 +182,9 @@
                 android:id="@+id/inPortGrid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/inPortTitle" />
+                android:layout_below="@id/inPortTitle"
+                android:layout_marginTop="10dp"
+                android:numColumns="5" />
         </RelativeLayout>
 
         <org.freecolandroid.ui.colony.CargoView

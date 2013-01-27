@@ -109,7 +109,7 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
 
     private Paint mPaint;
 
-    private OnUnitLocationUpdatedListener mListener;
+    private OnColonyUpdatedListener mListener;
 
     private ImageView mDragShadowView;
 
@@ -255,7 +255,8 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
     public boolean onDragEvent(DragEvent event) {
         switch (event.getAction()) {
         case DragEvent.ACTION_DRAG_STARTED:
-            return true;
+            DragHolder holder = (DragHolder) event.getLocalState();
+            return holder.unit != null;
         case DragEvent.ACTION_DROP:
             DragHolder dragHolder = (DragHolder) event.getLocalState();
             Unit unit = dragHolder.unit;
@@ -296,7 +297,7 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         if (workTile != null && workTile != origin) {
             boolean canWork = tryWork(workTile, unit);
             if (canWork) {
-                mListener.unitLocationUpdated(unit, workTile);
+                mListener.onUnitLocationUpdated(unit, workTile);
             }
         }
     }
@@ -416,7 +417,7 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
         return true;
     }
 
-    public void setOnUnitLocationUpdatedListener(OnUnitLocationUpdatedListener listener) {
+    public void setOnUnitLocationUpdatedListener(OnColonyUpdatedListener listener) {
         mListener = listener;
     }
 

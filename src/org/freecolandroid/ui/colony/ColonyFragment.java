@@ -62,7 +62,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpdatedListener,
+public class ColonyFragment extends FreeColFragment implements OnColonyUpdatedListener,
         RefreshRequestListener {
 
     private Colony mColony;
@@ -136,7 +136,7 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
         // TODO Use selection from the In Port panel to select which carrier to
         // show
         CargoView cargo = (CargoView) getView().findViewById(R.id.cargo);
-        cargo.init(mClient);
+        cargo.init(mClient, this);
         for (Unit unit : mColony.getTile().getUnitList()) {
             if (unit.isCarrier()) {
                 cargo.setCarrier(unit);
@@ -297,7 +297,7 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
     }
 
     @Override
-    public void unitLocationUpdated(Unit unit, WorkLocation location) {
+    public void onUnitLocationUpdated(Unit unit, WorkLocation location) {
         refresh();
         if (location instanceof ColonyTile
                 && (unit.getWorkType() == null || unit.getWorkTile().getProductionOf(unit,
@@ -308,6 +308,11 @@ public class ColonyFragment extends FreeColFragment implements OnUnitLocationUpd
 
     @Override
     public void onRefreshRequested() {
+        refresh();
+    }
+
+    @Override
+    public void onGoodsMoved() {
         refresh();
     }
 }

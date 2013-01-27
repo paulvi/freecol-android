@@ -101,6 +101,8 @@ public class CargoView extends FrameLayout {
 
     private FreeColClient mClient;
 
+    private OnColonyUpdatedListener mListener;
+
     public CargoView(Context context) {
         super(context);
     }
@@ -123,8 +125,9 @@ public class CargoView extends FrameLayout {
         grid.setAdapter(mAdapter);
     }
 
-    public void init(FreeColClient client) {
+    public void init(FreeColClient client, OnColonyUpdatedListener listener) {
         mClient = client;
+        mListener = listener;
     }
 
     public void setCarrier(Unit carrier) {
@@ -161,13 +164,13 @@ public class CargoView extends FrameLayout {
         case DragEvent.ACTION_DROP: {
             DragHolder holder = (DragHolder) event.getLocalState();
             int loadableAmount = mCarrier.getLoadableAmount(holder.goods.getType());
+            loadableAmount = Math.min(loadableAmount, holder.goods.getAmount());
             if (loadableAmount > 0) {
-                loadableAmount = Math.min(loadableAmount, holder.goods.getAmount());
                 Goods goodsToAdd = new Goods(holder.goods.getGame(), holder.goods.getLocation(),
                         holder.goods.getType(), loadableAmount);
                 holder.goods.setAmount(holder.goods.getAmount() - loadableAmount);
                 mClient.getInGameController().loadCargo(goodsToAdd, mCarrier);
-                mAdapter.notifyDataSetChanged();
+                mListener.onGoodsMoved();
             }
         }
             break;
