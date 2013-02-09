@@ -6,6 +6,7 @@ import net.sf.freecol.common.model.Colony;
 import net.sf.freecol.common.model.Goods;
 import net.sf.freecol.common.model.GoodsContainer;
 import net.sf.freecol.common.model.GoodsType;
+import net.sf.freecol.common.model.Unit;
 
 import org.freecolandroid.R;
 
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -54,6 +56,22 @@ public class WarehouseView extends LinearLayout {
         mListener = listener;
     }
 
+    @Override
+    public boolean onDragEvent(DragEvent event) {
+        DragHolder holder = (DragHolder) event.getLocalState();
+        switch (event.getAction()) {
+        case DragEvent.ACTION_DRAG_STARTED:
+            return holder.goods != null && holder.goods.getLocation() instanceof Unit;
+        case DragEvent.ACTION_DROP:
+            mClient.getInGameController().unloadCargo(holder.goods, false);
+            mListener.onGoodsMoved();
+            break;
+        default:
+            break;
+        }
+        return true;
+    }
+
     public void refresh() {
         removeAllViews();
         if (mColony != null) {
@@ -85,18 +103,20 @@ public class WarehouseView extends LinearLayout {
                     changeView.setText(change > 0 ? "+" + change : Integer.toString(change));
 
                     // Setup drag & drop
-                    goodsView.setOnTouchListener(new OnTouchListener() {
+                    if (goods.getAmount() > 0) {
+                        goodsView.setOnTouchListener(new OnTouchListener() {
 
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                DragHolder holder = new DragHolder(goods, mColony);
-                                v.startDrag(ClipData.newPlainText("Drag", "Drag"),
-                                        new DragShadowBuilder(iconView), holder, 0);
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    DragHolder holder = new DragHolder(goods, mColony);
+                                    v.startDrag(ClipData.newPlainText("Drag", "Drag"),
+                                            new DragShadowBuilder(iconView), holder, 0);
+                                }
+                                return true;
                             }
-                            return true;
-                        }
-                    });
+                        });
+                    }
 
                     addView(goodsView, new LayoutParams(LayoutParams.WRAP_CONTENT,
                             LayoutParams.WRAP_CONTENT));

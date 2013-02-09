@@ -9,11 +9,13 @@ import net.sf.freecol.common.model.Unit;
 
 import org.freecolandroid.R;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -79,20 +81,32 @@ public class CargoView extends FrameLayout {
             } else {
                 // Create or populate a goods view
                 position -= mCarrier.getUnitCount();
-                ImageView goodsView;
+                final ImageView goodsView;
                 if (convertView != null) {
                     goodsView = (ImageView) convertView;
                 } else {
                     goodsView = new ImageView(getContext());
                     convertView = goodsView;
                 }
-                Bitmap icon = lib.getGoodsImage(mCarrier.getGoodsList().get(position).getType())
-                        .getBitmap();
+                final Goods goods = mCarrier.getGoodsList().get(position);
+                Bitmap icon = lib.getGoodsImage(goods.getType()).getBitmap();
                 goodsView.setImageBitmap(icon);
+                // Setup drag & drop
+                goodsView.setOnTouchListener(new OnTouchListener() {
+
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            DragHolder dragHolder = new DragHolder(goods, mCarrier);
+                            v.startDrag(ClipData.newPlainText("Drag", "Drag"),
+                                    new View.DragShadowBuilder(goodsView), dragHolder, 0);
+                        }
+                        return true;
+                    }
+                });
             }
             return convertView;
         }
-
     }
 
     private Unit mCarrier;
