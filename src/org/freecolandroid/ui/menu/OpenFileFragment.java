@@ -64,11 +64,22 @@ public class OpenFileFragment extends FreeColDialogFragment {
         return f;
     }
 
+    // @Override
+    // public Dialog onCreateDialog(Bundle savedInstanceState) {
+    // Dialog d = new Dialog(getActivity(), R.style.GameMenu);
+    // d.setContentView(R.layout.frag_dialog_open_file);
+    // return d;
+    // }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog d = new Dialog(getActivity(), R.style.GameMenu);
-        d.setContentView(R.layout.frag_dialog_open_file);
-        return d;
+        setStyle(STYLE_NO_FRAME, getTheme());
+        return super.onCreateDialog(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.frag_dialog_open_file, container, false);
     }
 
     @Override

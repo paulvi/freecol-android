@@ -27,9 +27,6 @@ import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.BuildableType;
 import net.sf.freecol.common.model.Colony;
 import net.sf.freecol.common.model.ColonyTile;
-import net.sf.freecol.common.model.Goods;
-import net.sf.freecol.common.model.GoodsContainer;
-import net.sf.freecol.common.model.GoodsType;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.model.WorkLocation;
@@ -43,22 +40,15 @@ import org.freecolandroid.ui.adapters.BuildingsListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter;
 import org.freecolandroid.ui.adapters.ConstructionProgressListAdapter.ConstructionProgress;
 
-import android.content.ClipData;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -96,7 +86,7 @@ public class ColonyFragment extends FreeColFragment implements OnColonyUpdatedLi
             public boolean onDrag(View v, DragEvent event) {
                 if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
                     DragHolder dragHolder = (DragHolder) event.getLocalState();
-                    if (dragHolder.getDragDuration() < 200) {
+                    if (dragHolder.getDragDuration() < 200 && dragHolder.unit != null) {
                         showWorkPicker(dragHolder.unit);
                     }
                 }
@@ -104,6 +94,8 @@ public class ColonyFragment extends FreeColFragment implements OnColonyUpdatedLi
             }
         });
 
+        WarehouseView warehouse = (WarehouseView) getView().findViewById(R.id.warehouse);
+        warehouse.setup(mClient, mColony, this);
     }
 
     @Override
@@ -166,54 +158,8 @@ public class ColonyFragment extends FreeColFragment implements OnColonyUpdatedLi
     }
 
     private void updateWarehouse() {
-        LinearLayout warehouseContainer = (LinearLayout) getView().findViewById(
-                R.id.warehouse_container);
-        warehouseContainer.removeAllViews();
-        GoodsContainer container = mColony.getGoodsContainer();
-        for (GoodsType goodsType : mColony.getSpecification().getGoodsTypeList()) {
-            if (goodsType.isStorable()) {
-                final Goods goods = container.getGoods(goodsType);
-                Bitmap icon = getImageLibrary().getGoodsImage(goods.getType(), 1f).getBitmap();
-                String amount = Integer.toString(goods.getAmount());
-                View goodsView = getActivity().getLayoutInflater().inflate(
-                        R.layout.list_item_goods, warehouseContainer, false);
-                final ImageView iconView = (ImageView) goodsView.findViewById(R.id.icon);
-                iconView.setImageBitmap(icon);
-                // Amount
-                TextView amountView = (TextView) goodsView.findViewById(R.id.amount);
-                amountView.setText(amount);
-                // Production (change)
-                TextView changeView = (TextView) goodsView.findViewById(R.id.change);
-                int change = mColony.getAdjustedNetProductionOf(goodsType);
-                if (change > 0) {
-                    changeView.setTextColor(Color.GREEN);
-                } else if (change < 0) {
-                    changeView.setTextColor(Color.RED);
-                } else {
-                    // No production surplus/shortage
-                    changeView.setVisibility(View.GONE);
-                }
-                changeView.setText(change > 0 ? "+" + change : Integer.toString(change));
-
-                // Setup drag & drop
-                goodsView.setOnTouchListener(new OnTouchListener() {
-
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            DragHolder holder = new DragHolder(goods, mColony);
-                            v.startDrag(ClipData.newPlainText("Drag", "Drag"),
-                                    new DragShadowBuilder(iconView), holder, 0);
-                        }
-                        return true;
-                    }
-                });
-
-                warehouseContainer.addView(goodsView, new LayoutParams(LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT));
-
-            }
-        }
+        WarehouseView warehouse = (WarehouseView) getView().findViewById(R.id.warehouse);
+        warehouse.refresh();
     }
 
     private void updateBuildingInfo() {

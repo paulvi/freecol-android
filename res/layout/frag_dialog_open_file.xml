@@ -2,31 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="500dp"
     android:layout_height="wrap_content"
-    android:padding="50dp"
-    android:orientation="vertical"
+    android:background="@drawable/menu_bg"
     android:gravity="center"
-    android:background="@drawable/menu_bg" >
+    android:orientation="vertical"
+    android:padding="16dp" >
 
- <TextView
-     android:id="@+id/open_title"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:layout_marginBottom="20dp"
-     android:gravity="left"
-     style="@android:style/TextAppearance.DeviceDefault.Large" />
-    
- <ListView
-     android:id="@+id/file_list"
-     android:layout_width="match_parent"
-     android:layout_height="400dp"
-     android:layout_marginBottom="30dp"
-     android:listSelector="@drawable/menu_bg"
-     android:background="@drawable/menu_bg" />
-    
- <Button
-     android:id="@+id/open"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:enabled="false" />
+    <TextView
+        android:id="@+id/open_title"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center" />
+
+    <ListView
+        android:id="@+id/file_list"
+        android:layout_width="match_parent"
+        android:layout_height="340dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/menu_bg"
+        android:listSelector="@drawable/menu_bg"
+        android:minHeight="300dp" />
+
+    <Button
+        android:id="@+id/open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false" />
 
 </LinearLayout>

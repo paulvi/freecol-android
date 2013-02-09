@@ -145,20 +145,18 @@
             android:layout_toRightOf="@id/current_production_image" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/warehouse_container"
+    <org.freecolandroid.ui.colony.WarehouseView
+        android:id="@+id/warehouse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" />
+        android:layout_marginTop="8dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/warehouse_container"
+        android:layout_above="@id/warehouse"
         android:layout_below="@id/production_info"
         android:layout_marginTop="16dp"
         android:orientation="horizontal" >
