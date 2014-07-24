@@ -66,8 +66,8 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['j2se-src','src']
+            java.srcDirs = ['j2se-src','src']
+            resources.srcDirs = ['src']
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
@@ -97,6 +97,9 @@ android {
         //applicationIdSuffix
     }
 
+    lintOptions {
+        abortOnError false
+    }
 }
 
 /*
