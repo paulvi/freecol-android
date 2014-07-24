@@ -1,3 +1,6 @@
 gen/
 bin/
-
+/build/
+/.gradle/
+/local.properties
+/.DS_Store
