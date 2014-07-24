@@ -21,9 +21,8 @@ package org.freecolandroid.ui.game;
 
 import static org.freecolandroid.Constants.LOG_TAG;
 import net.sf.freecol.client.FreeColClient;
-
 import org.freecolandroid.repackaged.java.awt.Graphics2D;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.SystemClock;
@@ -113,7 +112,8 @@ public class GameCanvas extends SurfaceView implements Callback {
             mPaused = paused;
         }
 
-        @Override
+        @SuppressLint("WrongCall")
+		@Override
         public void run() {
             Log.d(LOG_TAG, "GameCanvas.PaintThread.run() - start");
             System.out.println();

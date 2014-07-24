@@ -20,10 +20,8 @@
 package org.freecolandroid.ui.colony;
 
 import static org.freecolandroid.Constants.LOG_TAG;
-
 import java.util.List;
 import java.util.Locale;
-
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.ImageLibrary;
@@ -41,11 +39,10 @@ import net.sf.freecol.common.model.TileType;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.model.UnitLocation.NoAddReason;
 import net.sf.freecol.common.model.WorkLocation;
-
 import org.freecolandroid.debug.FCLog;
 import org.freecolandroid.repackaged.java.awt.Color;
 import org.freecolandroid.repackaged.java.awt.Graphics2D;
-
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -69,7 +66,8 @@ public class ColonyMapCanvas extends SurfaceView implements Callback {
 
         private boolean mRunning;
 
-        @Override
+        @SuppressLint("WrongCall")
+		@Override
         public void run() {
             Log.d(LOG_TAG, "ColonyMapCanvas.PaintThread.run() - start");
             System.out.println();
