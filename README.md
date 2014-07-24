@@ -7,4 +7,13 @@ Changes:
 
 - added Gradle build, make ready for Android Studio (and Eclipse as well)
 
-- consider has awt/swing port as separate project
+- consider to have awt/swing port as separate project
+
+### Pusing existing git repo to GitHub
+
+	git remote add github https://github.com/PaulVI/freecol-android.git
+	git push -u github master
+
+### Status
+
+- <http://stackoverflow.com/questions/24928481/android-gradle-build-for-project-with-2-source-folders-fails>
